@@ -315,16 +315,16 @@ void action_plover_key(keyevent_t event) {
     }
 }
 
-action_t key_depending_on_mods(keyevent_t event, uint8_t default_key, uint8_t modified_key, uint8_t dependent_mods) {
+uint16_t key_depending_on_mods(keyevent_t event, uint8_t default_key, uint8_t modified_key, uint8_t dependent_mods) {
     static bool mod_pressed;
     if (event.pressed) {
         // save mod state that will persist until the unpress
         mod_pressed = (get_mods() & dependent_mods);
     }
-    return (action_t) ACTION_MODS_KEY(0, mod_pressed ? modified_key : default_key);
+    return ACTION_MODS_KEY(0, mod_pressed ? modified_key : default_key);
 }
 
-action_t get_any_key_action(keyevent_t event, uint8_t layer) {
+uint16_t get_any_key_action(keyevent_t event, uint8_t layer) {
     uint8_t col = event.key.col;
     uint8_t row = event.key.row;
 
@@ -332,19 +332,19 @@ action_t get_any_key_action(keyevent_t event, uint8_t layer) {
         case LAYER_BLUESHIFT:
             if (col == 1) {
                 switch (row) {
-                    case 9:  return (action_t)ACTION_MODS_KEY(MOD_LGUI, KC_LEFT); // Home
-                    case 11: return (action_t)ACTION_MODS_KEY(MOD_LGUI, KC_RGHT); // End
+                    case 9:  return ACTION_MODS_KEY(MOD_LGUI, KC_LEFT); // Home
+                    case 11: return ACTION_MODS_KEY(MOD_LGUI, KC_RGHT); // End
                 }
             }
             break;
         case LAYER_NUMPAD:
             if (col == 3 && row == 1) {
-                return (action_t)ACTION_MODS_KEY(MOD_LSFT, KC_Z);  // :
+                return ACTION_MODS_KEY(MOD_LSFT, KC_Z);  // :
             }
             break;
         case LAYER_BASE:
             if (col == 4 && row == 12) {
-                return (action_t)ACTION_MODS_KEY(MOD_LGUI, KC_TAB); // Alt+tab
+                return ACTION_MODS_KEY(MOD_LGUI, KC_TAB); // Alt+tab
             } else if (col == 1 && row == 1) { // apostrophe / CMD+`
                 return key_depending_on_mods(event, KC_Q, KC_GRV, MOD_BIT(KC_LGUI) | MOD_BIT(KC_RGUI));
             } else if (col == 1 && row == 13) { // media forward/back
@@ -361,12 +361,13 @@ action_t get_any_key_action(keyevent_t event, uint8_t layer) {
         print("col = "); pdec(col); print("\n");
         print("row = "); pdec(row); print("\n");
     }
-    return (action_t)ACTION_NO;
+    return ACTION_NO;
 }
 
 void action_any_key(keyevent_t event, uint8_t layer) {
-    action_t action = get_any_key_action(event, layer);
-    if (action.code != (action_t)ACTION_NO.code) {
+    action_t action;
+    action.code = get_any_key_action(event, layer);
+    if (action.code != ACTION_NO) {
         simon_hotkey(event, action);
     }
 }
@@ -405,7 +406,8 @@ void action_shiftswitch(keyevent_t event) {
 
     uint8_t savedmods = get_mods();
 
-    action_t action = (action_t)ACTION_MODS_KEY(savedmods ? 0 : MOD_LSFT, keycode);
+    action_t action;
+    action.code = ACTION_MODS_KEY(savedmods ? 0 : MOD_LSFT, keycode);
 
     bool shift_pressed = savedmods & (MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT));
 

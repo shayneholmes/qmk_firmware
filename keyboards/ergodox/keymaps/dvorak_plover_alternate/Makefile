@@ -15,6 +15,7 @@ UNICODEMAP_ENABLE:=no
 UNICODE_ENABLE:=no
 
 EXTRAFLAGS+=-fno-diagnostics-color
+COLOR:=false
 
 ifndef QUANTUM_DIR
 	include ../../../../Makefile

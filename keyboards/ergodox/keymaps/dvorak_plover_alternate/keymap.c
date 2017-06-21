@@ -247,7 +247,7 @@ enum macro_id {
 /*
  * Fn action definition (limited to 32)
  */
-static const action_t PROGMEM fn_actions[] = {
+const uint16_t PROGMEM fn_actions[] = {
     ACTION_LAYER_SET(0, ON_PRESS),                  // FN0 - reset layer to just 0
     ACTION_LAYER_TAP_TOGGLE(LAYER_BLUESHIFT),       // FN1 - switch to BlueShift
     ACTION_LAYER_TAP_KEY(LAYER_MOVEMENT, KC_F21),   // FN2 - movement layer, also desktop switcher
@@ -320,7 +320,7 @@ action_t key_depending_on_mods(keyevent_t event, uint8_t default_key, uint8_t mo
         // save mod state that will persist until the unpress
         mod_pressed = (get_mods() & dependent_mods);
     }
-    return (action_t) ACTION_MODS_KEY(MOD_NONE, mod_pressed ? modified_key : default_key);
+    return (action_t) ACTION_MODS_KEY(0, mod_pressed ? modified_key : default_key);
 }
 
 action_t get_any_key_action(keyevent_t event, uint8_t layer) {
@@ -404,7 +404,7 @@ void action_shiftswitch(keyevent_t event) {
 
     uint8_t savedmods = get_mods();
 
-    action_t action = (action_t)ACTION_MODS_KEY(savedmods ? MOD_NONE : MOD_LSFT, keycode);
+    action_t action = (action_t)ACTION_MODS_KEY(savedmods ? 0 : MOD_LSFT, keycode);
 
     bool shift_pressed = savedmods & (MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT));
 

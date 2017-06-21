@@ -167,7 +167,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KEYMAP(  // layer 6: F-keys + cursor
         // left hand
         KC_FN0, KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,
-        KC_FN4, KC_NO,  KC_PGUP,KC_UP,  KC_PGDN,KC_NO,  _______,
+        RESET,  KC_NO,  KC_PGUP,KC_UP,  KC_PGDN,KC_NO,  _______,
         _______,KC_HOME,KC_LEFT,KC_DOWN,KC_RGHT,KC_END,
         _______,KC_NO,  KC_NO,  KC_END, KC_HOME,KC_NO,  _______,
         _______,_______,_______,KC_FN10,KC_FN11,
@@ -176,7 +176,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                         KC_LCTL,KC_LSFT,_______,
         // right hand
                 KC_F7,  KC_F8,  KC_F9,  KC_F10, KC_F11, KC_F12, KC_MINS,
-                _______,KC_NO,  KC_PGUP,KC_UP,  KC_PGDN,KC_NO,  KC_FN4,
+                _______,KC_NO,  KC_PGUP,KC_UP,  KC_PGDN,KC_NO,  RESET,
                         KC_HOME,KC_LEFT,KC_DOWN,KC_RGHT,KC_END, _______,
                 _______,KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  _______,
                                 KC_RGUI,KC_RALT,_______,_______,_______,
@@ -236,7 +236,6 @@ enum function_id {
     ANY_KEY,
     PLOVER_SWITCH,
     SHIFT_SWITCH,
-    TEENSY_BUTTON,
     FKEY_SWITCH,
     UNUSED,
 };
@@ -255,7 +254,7 @@ const uint16_t PROGMEM fn_actions[] = {
     ACTION_LAYER_TAP_TOGGLE(LAYER_BLUESHIFT),       // FN1 - switch to BlueShift
     ACTION_LAYER_TAP_KEY(LAYER_MOVEMENT, KC_F21),   // FN2 - movement layer, also desktop switcher
     ACTION_LAYER_TAP_TOGGLE(LAYER_NUMPAD),          // FN3 - numpad
-    ACTION_FUNCTION(TEENSY_BUTTON),                 // FN4 - teensy reset button
+    ACTION_FUNCTION(UNUSED),                        // ** FN4 - unused
     ACTION_FUNCTION(PLOVER_SWITCH),                 // FN5 - toggle Plover
     ACTION_FUNCTION_OPT(ANY_KEY, LAYER_BASE),       // FN6 - AnyKey on Base
     ACTION_FUNCTION_OPT(ANY_KEY, LAYER_NUMPAD),     // FN7 - AnyKey on Numpad
@@ -453,11 +452,6 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
             return action_any_key(event, opt);
         case SHIFT_SWITCH:
             return action_shiftswitch(event);
-        case TEENSY_BUTTON:
-            clear_keyboard();
-            wait_ms(50);
-            bootloader_jump(); // not return
-            break;
         case FKEY_SWITCH:
             return action_fkey(event);
         default:

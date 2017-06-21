@@ -3,6 +3,8 @@
 #include "action_util.h"
 #include "action_layer.h"
 
+#define _______ KC_TRNS
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Keymap 0: Default Layer
      *
@@ -36,15 +38,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_LSFT,KC_A,   KC_S,   KC_D,   KC_F,   KC_G,
         KC_LCTL,KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   KC_DEL,
         KC_FN3, KC_FN1, KC_LCTL,KC_LALT,KC_LGUI,
-                                      KC_FN5, KC_F15,
-                                           KC_F16,
-                                 KC_BSPC,KC_LSFT,KC_LGUI,
+                                                KC_FN5, KC_F15,
+                                                        KC_F16,
+                                       KC_BSPC,KC_LSFT,KC_LGUI,
         // right hand
-             KC_F18, KC_FN12,KC_FN12,KC_FN12,KC_FN12,KC_FN12,KC_MPLY,
-             KC_FN3, KC_Y,   KC_U,   KC_I,   KC_O,   KC_P,   KC_FN6,
-                  KC_H,   KC_J,   KC_K,   KC_L,   KC_SCLN,KC_RSFT,
-             KC_DEL, KC_N,   KC_M,   KC_COMM,KC_DOT, KC_SLSH,KC_RCTL,
-                       KC_RGUI,KC_RALT,KC_RCTL,KC_FN6, KC_FN2,
+                KC_F18, KC_FN12,KC_FN12,KC_FN12,KC_FN12,KC_FN12,KC_MPLY,
+                KC_FN3, KC_Y,   KC_U,   KC_I,   KC_O,   KC_P,   KC_FN6,
+                        KC_H,   KC_J,   KC_K,   KC_L,   KC_SCLN,KC_RSFT,
+                KC_DEL, KC_N,   KC_M,   KC_COMM,KC_DOT, KC_SLSH,KC_RCTL,
+                                KC_RGUI,KC_RALT,KC_RCTL,KC_FN6, KC_FN2,
         KC_F13, KC_MPLY,
         KC_F14,
         KC_ENT, KC_FN1, KC_SPC
@@ -52,23 +54,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     KEYMAP(  // layer 1: transparent because this gets triggered more than I'd like
         // left hand
-        KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,
-        KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,
-        KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,
-        KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,
-        KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,
-                                      KC_TRNS,KC_TRNS,
-                                           KC_TRNS,
-                                 KC_TRNS,KC_TRNS,KC_TRNS,
+        _______,_______,_______,_______,_______,_______,_______,
+        _______,_______,_______,_______,_______,_______,_______,
+        _______,_______,_______,_______,_______,_______,
+        _______,_______,_______,_______,_______,_______,_______,
+        _______,_______,_______,_______,_______,
+                                                _______,_______,
+                                                        _______,
+                                        _______,_______,_______,
         // right hand
-             KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,
-             KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,
-                  KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,
-             KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,
-                       KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,
-        KC_TRNS,KC_TRNS,
-        KC_TRNS,
-        KC_TRNS,KC_TRNS,KC_TRNS
+                _______,_______,_______,_______,_______,_______,_______,
+                _______,_______,_______,_______,_______,_______,_______,
+                        _______,_______,_______,_______,_______,_______,
+                _______,_______,_______,_______,_______,_______,_______,
+                                _______,_______,_______,_______,_______,
+        _______,_______,
+        _______,
+        _______,_______,_______
     ),
 
     KEYMAP(  // layer 2: customized dvorak
@@ -78,15 +80,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_LSFT,KC_A,   KC_O,   KC_E,   KC_U,   KC_I,
         KC_LCTL,KC_SCLN,KC_Q,   KC_J,   KC_K,   KC_X,   KC_DEL,
         KC_FN3, KC_FN1, KC_LCTL,KC_LALT,KC_LGUI,
-                                      KC_FN5, KC_HOME,
-                                           KC_END,
-                                 KC_BSPC,KC_LSFT,KC_LGUI,
+                                                KC_FN5, KC_HOME,
+                                                        KC_END,
+                                        KC_BSPC,KC_LSFT,KC_LGUI,
         // right hand
-             KC_MINS,KC_6,   KC_7,   KC_8,   KC_9,   KC_0,   KC_EQL,
-             KC_FN3, KC_F,   KC_G,   KC_C,   KC_R,   KC_L,   KC_SLSH,
-                  KC_D,   KC_H,   KC_T,   KC_N,   KC_S,   KC_RSFT,
-             KC_DEL, KC_B,   KC_M,   KC_W,   KC_V,   KC_Z,   KC_RCTL,
-                       KC_LEFT,KC_DOWN,KC_UP,  KC_RGHT,KC_FN2,
+                KC_MINS,KC_6,   KC_7,   KC_8,   KC_9,   KC_0,   KC_EQL,
+                KC_FN3, KC_F,   KC_G,   KC_C,   KC_R,   KC_L,   KC_SLSH,
+                        KC_D,   KC_H,   KC_T,   KC_N,   KC_S,   KC_RSFT,
+                KC_DEL, KC_B,   KC_M,   KC_W,   KC_V,   KC_Z,   KC_RCTL,
+                                KC_LEFT,KC_DOWN,KC_UP,  KC_RGHT,KC_FN2,
         KC_PGUP,KC_MPLY,
         KC_PGDN,
         KC_ENT, KC_FN1, KC_SPC
@@ -94,23 +96,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     KEYMAP(  // layer 3 : qwerty
         // left hand
-        KC_TRNS,KC_1,   KC_2,   KC_3,   KC_4,   KC_5,   KC_TRNS,
-        KC_TRNS,KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,   KC_TRNS,
-        KC_TRNS,KC_A,   KC_S,   KC_D,   KC_F,   KC_G,
-        KC_TRNS,KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   KC_TRNS,
-        KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,
-                                      KC_TRNS,KC_TRNS,
-                                           KC_TRNS,
-                                 KC_TRNS,KC_TRNS,KC_TRNS,
+        _______,KC_1,   KC_2,   KC_3,   KC_4,   KC_5,   _______,
+        _______,KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,   _______,
+        _______,KC_A,   KC_S,   KC_D,   KC_F,   KC_G,
+        _______,KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   _______,
+        _______,_______,_______,_______,_______,
+                                                _______,_______,
+                                                        _______,
+                                        _______,_______,_______,
         // right hand
-             KC_TRNS,KC_6,   KC_7,   KC_8,   KC_9,   KC_0,   KC_MINS,
-             KC_TRNS,KC_Y,   KC_U,   KC_I,   KC_O,   KC_P,   KC_RBRC,
-                  KC_H,   KC_J,   KC_K,   KC_L,   KC_SCLN,KC_RSFT,
-             KC_TRNS,KC_N,   KC_M,   KC_COMM,KC_DOT, KC_SLSH,KC_RSFT,
-                       KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,
-        KC_TRNS,KC_TRNS,
-        KC_TRNS,
-        KC_TRNS,KC_TRNS,KC_TRNS
+                _______,KC_6,   KC_7,   KC_8,   KC_9,   KC_0,   KC_MINS,
+                _______,KC_Y,   KC_U,   KC_I,   KC_O,   KC_P,   KC_RBRC,
+                        KC_H,   KC_J,   KC_K,   KC_L,   KC_SCLN,KC_RSFT,
+                _______,KC_N,   KC_M,   KC_COMM,KC_DOT, KC_SLSH,KC_RSFT,
+                                _______,_______,_______,_______,_______,
+        _______,_______,
+        _______,
+        _______,_______,_______
     ),
 
     // PLOVER (SPECIAL CASE)
@@ -120,20 +122,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // left hand
         KC_FN5, KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,
         KC_NO,  KC_1,   KC_2,   KC_3,   KC_4,   KC_5,   KC_NO,
-        KC_TRNS,KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,
+        _______,KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,
         KC_NO,  KC_A,   KC_S,   KC_D,   KC_F,   KC_G,   KC_NO,
         KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,
-                                      KC_FN5, KC_NO,
-                                           KC_NO,
-                                 KC_C,   KC_V,   KC_NO,
+                                                KC_FN5, KC_NO,
+                                                        KC_NO,
+                                        KC_C,   KC_V,   KC_NO,
         // right hand
-             KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_TRNS,
-             KC_NO,  KC_6,   KC_7,   KC_8,   KC_9,   KC_0,   KC_TRNS,
-                  KC_Y,   KC_U,   KC_I,   KC_O,   KC_P,   KC_LBRC,
-             KC_NO,  KC_H,   KC_J,   KC_K,   KC_L,   KC_SCLN,KC_QUOT,
-                       KC_TRNS,KC_TRNS,KC_NO,  KC_NO,  KC_NO,
-        KC_TRNS,KC_TRNS,
-        KC_TRNS,
+                KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  _______,
+                KC_NO,  KC_6,   KC_7,   KC_8,   KC_9,   KC_0,   _______,
+                        KC_Y,   KC_U,   KC_I,   KC_O,   KC_P,   KC_LBRC,
+                KC_NO,  KC_H,   KC_J,   KC_K,   KC_L,   KC_SCLN,KC_QUOT,
+                                _______,_______,KC_NO,  KC_NO,  KC_NO,
+        _______,_______,
+        _______,
         KC_NO,  KC_N,   KC_M
     ),
 
@@ -143,65 +145,65 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KEYMAP(  // layer 5: mouse + numpad
         // left hand
         KC_FN0, KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_PAUS,KC_PSCR,
-        KC_TRNS,KC_NO,  KC_WH_U,KC_MS_U,KC_WH_D,KC_BTN2,KC_TRNS,
-        KC_TRNS,KC_NO,  KC_MS_L,KC_MS_D,KC_MS_R,KC_BTN1,
-        KC_TRNS,KC_FN7, KC_NO,  KC_NO,  KC_NO,  KC_BTN3,KC_TRNS,
-        KC_TRNS,KC_FN13,KC_TRNS,KC_TRNS,KC_TRNS,
-                                      KC_TRNS,KC_TRNS,
-                                           KC_TRNS,
-                                 KC_TRNS,KC_TRNS,KC_TRNS,
+        _______,KC_NO,  KC_WH_U,KC_MS_U,KC_WH_D,KC_BTN2,_______,
+        _______,KC_NO,  KC_MS_L,KC_MS_D,KC_MS_R,KC_BTN1,
+        _______,KC_FN7, KC_NO,  KC_NO,  KC_NO,  KC_BTN3,_______,
+        _______,KC_FN13,_______,_______,_______,
+                                                _______,_______,
+                                                        _______,
+                                        _______,_______,_______,
         // right hand
-             KC_SLCK,KC_NLCK,KC_EQL, KC_PSLS,KC_PAST,KC_PMNS,KC_TRNS,
-             KC_TRNS,KC_BSPC,KC_P7,  KC_P8,  KC_P9,  KC_PMNS,KC_BSPC,
-                      KC_BSPC,KC_P4,  KC_P5,  KC_P6,  KC_PMNS,KC_PENT,
-             KC_BSPC,KC_BSPC,KC_P1,  KC_P2,  KC_P3,  KC_PPLS,KC_PENT,
-                       KC_P0,  KC_PDOT,KC_PDOT,KC_PENT,KC_PENT,
-        KC_TRNS,KC_TRNS,
-        KC_TRNS,
-        KC_ENT, KC_TRNS,KC_TRNS
+                KC_SLCK,KC_NLCK,KC_EQL, KC_PSLS,KC_PAST,KC_PMNS,_______,
+                _______,KC_BSPC,KC_P7,  KC_P8,  KC_P9,  KC_PMNS,KC_BSPC,
+                        KC_BSPC,KC_P4,  KC_P5,  KC_P6,  KC_PMNS,KC_PENT,
+                KC_BSPC,KC_BSPC,KC_P1,  KC_P2,  KC_P3,  KC_PPLS,KC_PENT,
+                                KC_P0,  KC_PDOT,KC_PDOT,KC_PENT,KC_PENT,
+        _______,_______,
+        _______,
+        KC_ENT, _______,_______
     ),
 
     #define LAYER_MOVEMENT 6
     KEYMAP(  // layer 6: F-keys + cursor
         // left hand
         KC_FN0, KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,
-        KC_FN4,KC_NO,  KC_PGUP,KC_UP,  KC_PGDN,KC_NO,  KC_TRNS,
-        KC_TRNS,KC_HOME,KC_LEFT,KC_DOWN,KC_RGHT,KC_END,
-        KC_TRNS,KC_NO,  KC_NO,  KC_END, KC_HOME,KC_NO,  KC_TRNS,
-        KC_TRNS,KC_TRNS,KC_TRNS,KC_FN10,KC_FN11,
-                                      KC_TRNS,KC_TRNS,
-                                           KC_TRNS,
-                                 KC_LCTL,KC_LSFT,KC_TRNS,
+        KC_FN4, KC_NO,  KC_PGUP,KC_UP,  KC_PGDN,KC_NO,  _______,
+        _______,KC_HOME,KC_LEFT,KC_DOWN,KC_RGHT,KC_END,
+        _______,KC_NO,  KC_NO,  KC_END, KC_HOME,KC_NO,  _______,
+        _______,_______,_______,KC_FN10,KC_FN11,
+                                                _______,_______,
+                                                        _______,
+                                        KC_LCTL,KC_LSFT,_______,
         // right hand
-             KC_F7,  KC_F8,  KC_F9,  KC_F10, KC_F11, KC_F12, KC_MINS,
-             KC_TRNS,KC_NO,  KC_PGUP,KC_UP,  KC_PGDN, KC_NO, KC_FN4,
-                  KC_HOME,KC_LEFT,KC_DOWN,KC_RGHT,KC_END, KC_TRNS,
-             KC_TRNS,KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_TRNS,
-                       KC_RGUI,KC_RALT,KC_TRNS,KC_TRNS,KC_TRNS,
-        KC_TRNS,KC_TRNS,
-        KC_TRNS, KC_TRNS,KC_RSFT,KC_RCTL
+                KC_F7,  KC_F8,  KC_F9,  KC_F10, KC_F11, KC_F12, KC_MINS,
+                _______,KC_NO,  KC_PGUP,KC_UP,  KC_PGDN,KC_NO,  KC_FN4,
+                        KC_HOME,KC_LEFT,KC_DOWN,KC_RGHT,KC_END, _______,
+                _______,KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  _______,
+                                KC_RGUI,KC_RALT,_______,_______,_______,
+        _______,_______,
+        _______, _______,KC_RSFT,KC_RCTL
     ),
 
     #define LAYER_BLUESHIFT 7
     KEYMAP(  // layer 7: "BlueShift"
         // left hand
         KC_FN0, KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,
-        KC_TRNS,KC_FN12,KC_FN12,KC_FN12,KC_PSCR,KC_BSLS,KC_TRNS,  // the FN12 entries are for tilde and inverted brace/bracket keys
-        KC_TRNS,KC_APP, KC_TAB, KC_RBRC,KC_QUOT,KC_INS,
-        KC_TRNS,KC_TRNS,KC_FN8, KC_TRNS,KC_CAPS,KC_TRNS,KC_TRNS,  // quit (alt+f4)
-        KC_FN13,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,
-                                      KC_TRNS,KC_TRNS,
-                                           KC_TRNS,
-                                 KC_TRNS,KC_TRNS,KC_TRNS,
+        _______,KC_FN12,KC_FN12,KC_FN12,KC_PSCR,KC_BSLS,_______,  // the FN12 entries are for tilde and inverted brace/bracket keys
+        _______,KC_APP, KC_TAB, KC_RBRC,KC_QUOT,KC_INS,
+        _______,_______,KC_FN8, _______,KC_CAPS,_______,_______,  // quit (alt+f4)
+        KC_FN13,_______,_______,_______,_______,
+                                                _______,_______,
+                                                        _______,
+                                        _______,_______,_______,
         // right hand
-             KC_F7,  KC_F8,  KC_F9,  KC_F10, KC_F11, KC_F12, KC_TRNS,
-             KC_TRNS,KC_PGUP,KC_FN8, KC_UP,  KC_FN8, KC_LBRC,KC_TRNS, // Home and End mapped to Cmd-L/KC_R
-                  KC_PGDN,KC_LEFT,KC_DOWN,KC_RGHT,KC_QUOT,KC_TRNS,
-             KC_TRNS,KC_TRNS,KC_NO,  KC_UP,  KC_NO,  KC_TRNS,KC_TRNS,
-                       KC_LEFT,KC_DOWN,KC_RGHT,KC_TRNS,KC_TRNS,
-        KC_TRNS,KC_TRNS,
-        KC_TRNS,
-        KC_TRNS,KC_TRNS,KC_TRNS
+                KC_F7,  KC_F8,  KC_F9,  KC_F10, KC_F11, KC_F12, _______,
+                _______,KC_PGUP,KC_FN8, KC_UP,  KC_FN8, KC_LBRC,_______, // Home and End mapped to Cmd-L/KC_R
+                        KC_PGDN,KC_LEFT,KC_DOWN,KC_RGHT,KC_QUOT,_______,
+                _______,_______,KC_NO,  KC_UP,  KC_NO,  _______,_______,
+                                KC_LEFT,KC_DOWN,KC_RGHT,_______,_______,
+        _______,_______,
+        _______,
+        _______,_______,_______
     ),
 
     // MODIFIERS THAT WON'T BE STICKY
@@ -210,22 +212,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KEYMAP(  // layer 8: F-keys only
         // left hand
         KC_FN0, KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,
-        KC_TRNS,KC_F13, KC_F14, KC_F15, KC_F16, KC_NO,  KC_TRNS,
-        KC_TRNS,KC_F17, KC_F18, KC_F19, KC_F20, KC_NO,
-        KC_TRNS,KC_F21, KC_F22, KC_F23, KC_F24, KC_NO,  KC_TRNS,
-        KC_FN13,KC_FN13,KC_TRNS,KC_LALT,KC_LGUI,
-                                      KC_TRNS,KC_TRNS,
-                                           KC_TRNS,
-                                 KC_LCTL,KC_LSFT,KC_TRNS,
+        _______,KC_F13, KC_F14, KC_F15, KC_F16, KC_NO,  _______,
+        _______,KC_F17, KC_F18, KC_F19, KC_F20, KC_NO,
+        _______,KC_F21, KC_F22, KC_F23, KC_F24, KC_NO,  _______,
+        KC_FN13,KC_FN13,_______,KC_LALT,KC_LGUI,
+                                                _______,_______,
+                                                        _______,
+                                        KC_LCTL,KC_LSFT,_______,
         // right hand
-             KC_NO,  KC_NO,  KC_F10, KC_F11, KC_F12, KC_NO,  KC_TRNS,
-             KC_TRNS,KC_NO,  KC_F7,  KC_F8,  KC_F9,  KC_NO,  KC_TRNS,
-                  KC_NO,  KC_F4,  KC_F5,  KC_F6,  KC_NO,  KC_TRNS,
-             KC_TRNS,KC_NO,  KC_F1,  KC_F2,  KC_F3,  KC_NO,  KC_TRNS,
-                       KC_RGUI,KC_RALT,KC_RCTL,KC_TRNS,KC_TRNS,
-        KC_TRNS,KC_TRNS,
-        KC_TRNS,
-        KC_TRNS,KC_RSFT,KC_RCTL
+                KC_NO,  KC_NO,  KC_F10, KC_F11, KC_F12, KC_NO,  _______,
+                _______,KC_NO,  KC_F7,  KC_F8,  KC_F9,  KC_NO,  _______,
+                        KC_NO,  KC_F4,  KC_F5,  KC_F6,  KC_NO,  _______,
+                _______,KC_NO,  KC_F1,  KC_F2,  KC_F3,  KC_NO,  _______,
+                                KC_RGUI,KC_RALT,KC_RCTL,_______,_______,
+        _______,_______,
+        _______,
+        _______,KC_RSFT,KC_RCTL
     ),
 };
 

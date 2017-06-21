@@ -487,4 +487,29 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
     return MACRO_NONE;
 }
 
+/*
+ * Hooks, used here for lighting
+ */
+void matrix_init_user(void)
+{
+    ergodox_board_led_on();
+    _delay_ms(250);
+    ergodox_board_led_off();
+}
+
+void matrix_scan_user(void)
+{
+    uint8_t layer = biton32(layer_state);
+
+    ergodox_board_led_off();
+    switch (layer) {
+        case 0:
+			// none
+            break;
+        default:
+            ergodox_board_led_on();
+            break;
+    }
+}
+
 // vim:shiftwidth=4:cindent:expandtab:tabstop=4

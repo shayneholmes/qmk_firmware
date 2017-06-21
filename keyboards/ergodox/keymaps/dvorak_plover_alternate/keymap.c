@@ -339,14 +339,14 @@ uint16_t get_any_key_action(keyevent_t event, uint8_t layer) {
             break;
         case LAYER_NUMPAD:
             if (col == 3 && row == 1) {
-                return ACTION_MODS_KEY(MOD_LSFT, KC_Z);  // :
+                return ACTION_MODS_KEY(MOD_LSFT, DV_SCLN); // :
             }
             break;
         case LAYER_BASE:
             if (col == 4 && row == 12) {
                 return ACTION_MODS_KEY(MOD_LGUI, KC_TAB); // Alt+tab
             } else if (col == 1 && row == 1) { // apostrophe / CMD+`
-                return key_depending_on_mods(event, KC_Q, KC_GRV, MOD_BIT(KC_LGUI) | MOD_BIT(KC_RGUI));
+                return key_depending_on_mods(event, DV_QUOT, KC_GRV, MOD_BIT(KC_LGUI) | MOD_BIT(KC_RGUI));
             } else if (col == 1 && row == 13) { // media forward/back
                 return key_depending_on_mods(event, KC_MEDIA_NEXT_TRACK, KC_MEDIA_PREV_TRACK, MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT));
             } else if (col == 0 && row == 0) { // ESC / CMD+`
@@ -392,9 +392,9 @@ uint8_t get_shiftswitch_key(keyevent_t event) {
     }
     else if (col == 1) { // next row
         switch (row) {
-            case 1: return KC_GRV;
-            case 2: return KC_MINS; // Left brace in Dvorak
-            case 3: return KC_EQL; // Right brace in Dvorak
+            case 1: return DV_GRV;
+            case 2: return DV_LBRC;
+            case 3: return DV_RBRC;
         }
     }
     return KC_NO;

@@ -3,7 +3,44 @@
 #include "action_util.h"
 #include "action_layer.h"
 
+/* id for user defined functions */
+enum function_id {
+    ANY_KEY,
+    PLOVER_SWITCH,
+    SHIFT_SWITCH,
+    FKEY_SWITCH,
+    UNUSED,
+};
+
+/*
+ * Macro definition
+ */
+enum macro_id {
+    PASSWORD1,
+    PASSWORD2,
+    PASSWORD3,
+};
+#include "passwords.h"
+
 #define _______ KC_TRNS
+#define LAYER_BASE 0
+#define LAYER_PLOVER 4
+#define LAYER_NUMPAD 5
+#define LAYER_MOVEMENT 6
+#define LAYER_BLUESHIFT 7
+#define LAYER_FKEYS 8
+
+#define ANYKEY F((ACTION_FUNCTION_OPT(ANY_KEY, CURRENT_LAYER) & 0xFFF))
+#define PLOVER F(PLOVER_SWITCH)
+#define SHIFTED F(SHIFT_SWITCH)
+#define FN_KEYS F(FKEY_SWITCH)
+
+#define TO_BASE TO(LAYER_BASE)
+#define TT_BLUE TT(LAYER_BLUESHIFT)
+#define TT_NUM TT(LAYER_NUMPAD)
+#define LT_MOVE LT(LAYER_MOVEMENT, KC_F21)
+#define PASSWD1 M(PASSWORD1)
+#define PASSWD2 M(PASSWORD2)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Keymap 0: Default Layer
@@ -30,27 +67,28 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // BASE LAYERS
 
-    #define LAYER_BASE 0
+    #define CURRENT_LAYER LAYER_BASE
     KEYMAP(  // layer 0: customized qwerty with symbol row switched
         // left hand
-        KC_FN6, KC_FN12,KC_FN12,KC_FN12,KC_FN12,KC_FN12,KC_F17,
-        KC_TAB, KC_FN6, KC_W,   KC_E,   KC_R,   KC_T,   KC_FN2,
+        ANYKEY, SHIFTED,SHIFTED,SHIFTED,SHIFTED,SHIFTED,KC_F17,
+        KC_TAB, ANYKEY, KC_W,   KC_E,   KC_R,   KC_T,   LT_MOVE,
         KC_LSFT,KC_A,   KC_S,   KC_D,   KC_F,   KC_G,
         KC_LCTL,KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   KC_DEL,
-        KC_FN3, KC_FN1, KC_LCTL,KC_LALT,KC_LGUI,
-                                                KC_FN5, KC_F15,
+        TT_NUM, TT_BLUE,KC_LCTL,KC_LALT,KC_LGUI,
+                                                PLOVER, KC_F15,
                                                         KC_F16,
                                        KC_BSPC,KC_LSFT,KC_LGUI,
         // right hand
-                KC_F18, KC_FN12,KC_FN12,KC_FN12,KC_FN12,KC_FN12,KC_MPLY,
-                KC_FN3, KC_Y,   KC_U,   KC_I,   KC_O,   KC_P,   KC_FN6,
+                KC_F18, SHIFTED,SHIFTED,SHIFTED,SHIFTED,SHIFTED,KC_MPLY,
+                TT_NUM, KC_Y,   KC_U,   KC_I,   KC_O,   KC_P,   ANYKEY,
                         KC_H,   KC_J,   KC_K,   KC_L,   KC_SCLN,KC_RSFT,
                 KC_DEL, KC_N,   KC_M,   KC_COMM,KC_DOT, KC_SLSH,KC_RCTL,
-                                KC_RGUI,KC_RALT,KC_RCTL,KC_FN6, KC_FN2,
+                                KC_RGUI,KC_RALT,KC_RCTL,ANYKEY, LT_MOVE,
         KC_F13, KC_MPLY,
         KC_F14,
-        KC_ENT, KC_FN1, KC_SPC
+        KC_ENT, TT_BLUE,KC_SPC
     ),
+    #undef CURRENT_LAYER
 
     KEYMAP(  // layer 1: transparent because this gets triggered more than I'd like
         // left hand
@@ -76,22 +114,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KEYMAP(  // layer 2: customized dvorak
         // left hand
         KC_ESC, KC_1,   KC_2,   KC_3,   KC_4,   KC_5,   KC_BSLS,
-        KC_TAB, KC_QUOT,KC_COMM,KC_DOT, KC_P,   KC_Y,   KC_FN2,
+        KC_TAB, KC_QUOT,KC_COMM,KC_DOT, KC_P,   KC_Y,   LT_MOVE,
         KC_LSFT,KC_A,   KC_O,   KC_E,   KC_U,   KC_I,
         KC_LCTL,KC_SCLN,KC_Q,   KC_J,   KC_K,   KC_X,   KC_DEL,
-        KC_FN3, KC_FN1, KC_LCTL,KC_LALT,KC_LGUI,
-                                                KC_FN5, KC_HOME,
+        TT_NUM, TT_BLUE,KC_LCTL,KC_LALT,KC_LGUI,
+                                                PLOVER, KC_HOME,
                                                         KC_END,
                                         KC_BSPC,KC_LSFT,KC_LGUI,
         // right hand
                 KC_MINS,KC_6,   KC_7,   KC_8,   KC_9,   KC_0,   KC_EQL,
-                KC_FN3, KC_F,   KC_G,   KC_C,   KC_R,   KC_L,   KC_SLSH,
+                TT_NUM, KC_F,   KC_G,   KC_C,   KC_R,   KC_L,   KC_SLSH,
                         KC_D,   KC_H,   KC_T,   KC_N,   KC_S,   KC_RSFT,
                 KC_DEL, KC_B,   KC_M,   KC_W,   KC_V,   KC_Z,   KC_RCTL,
-                                KC_LEFT,KC_DOWN,KC_UP,  KC_RGHT,KC_FN2,
+                                KC_LEFT,KC_DOWN,KC_UP,  KC_RGHT,LT_MOVE,
         KC_PGUP,KC_MPLY,
         KC_PGDN,
-        KC_ENT, KC_FN1, KC_SPC
+        KC_ENT, TT_BLUE,KC_SPC
     ),
 
     KEYMAP(  // layer 3 : qwerty
@@ -117,15 +155,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // PLOVER (SPECIAL CASE)
 
-    #define LAYER_PLOVER 4
     KEYMAP(  // layer 4: Steno for Plover
         // left hand
-        KC_FN5, KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,
+        PLOVER, KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,
         KC_NO,  KC_1,   KC_2,   KC_3,   KC_4,   KC_5,   KC_NO,
         _______,KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,
         KC_NO,  KC_A,   KC_S,   KC_D,   KC_F,   KC_G,   KC_NO,
         KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,
-                                                KC_FN5, KC_NO,
+                                                PLOVER, KC_NO,
                                                         KC_NO,
                                         KC_C,   KC_V,   KC_NO,
         // right hand
@@ -141,14 +178,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // MODIFIERS THAT MIGHT BE STICKY
 
-    #define LAYER_NUMPAD 5
+    #define CURRENT_LAYER LAYER_NUMPAD
     KEYMAP(  // layer 5: mouse + numpad
         // left hand
-        KC_FN0, KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_PAUS,KC_PSCR,
+        TO_BASE,KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_PAUS,KC_PSCR,
         _______,KC_NO,  KC_WH_U,KC_MS_U,KC_WH_D,KC_BTN2,_______,
         _______,KC_NO,  KC_MS_L,KC_MS_D,KC_MS_R,KC_BTN1,
-        _______,KC_FN7, KC_NO,  KC_NO,  KC_NO,  KC_BTN3,_______,
-        _______,KC_FN13,_______,_______,_______,
+        _______,ANYKEY, KC_NO,  KC_NO,  KC_NO,  KC_BTN3,_______,
+        _______,FN_KEYS,_______,_______,_______,
                                                 _______,_______,
                                                         _______,
                                         _______,_______,_______,
@@ -162,15 +199,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,
         KC_ENT, _______,_______
     ),
+    #undef CURRENT_LAYER
 
-    #define LAYER_MOVEMENT 6
     KEYMAP(  // layer 6: F-keys + cursor
         // left hand
-        KC_FN0, KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,
+        TO_BASE,KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,
         RESET,  KC_NO,  KC_PGUP,KC_UP,  KC_PGDN,KC_NO,  _______,
         _______,KC_HOME,KC_LEFT,KC_DOWN,KC_RGHT,KC_END,
         _______,KC_NO,  KC_NO,  KC_END, KC_HOME,KC_NO,  _______,
-        _______,_______,_______,KC_FN10,KC_FN11,
+        _______,_______,_______,PASSWD1,PASSWD2,
                                                 _______,_______,
                                                         _______,
                                         KC_LCTL,KC_LSFT,_______,
@@ -184,20 +221,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______,KC_RSFT,KC_RCTL
     ),
 
-    #define LAYER_BLUESHIFT 7
+    #define CURRENT_LAYER LAYER_BLUESHIFT
     KEYMAP(  // layer 7: "BlueShift"
         // left hand
-        KC_FN0, KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,
-        _______,KC_FN12,KC_FN12,KC_FN12,KC_PSCR,KC_BSLS,_______,  // the FN12 entries are for tilde and inverted brace/bracket keys
+        TO_BASE,KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,
+        _______,SHIFTED,SHIFTED,SHIFTED,KC_PSCR,KC_BSLS,_______,  // the SHIFTED entries are for tilde and inverted brace/bracket keys
         _______,KC_APP, KC_TAB, KC_RBRC,KC_QUOT,KC_INS,
-        _______,_______,KC_FN8, _______,KC_CAPS,_______,_______,  // quit (alt+f4)
-        KC_FN13,_______,_______,_______,_______,
+        _______,_______,ANYKEY, _______,KC_CAPS,_______,_______,  // quit (alt+f4)
+        FN_KEYS,_______,_______,_______,_______,
                                                 _______,_______,
                                                         _______,
                                         _______,_______,_______,
         // right hand
                 KC_F7,  KC_F8,  KC_F9,  KC_F10, KC_F11, KC_F12, _______,
-                _______,KC_PGUP,KC_FN8, KC_UP,  KC_FN8, KC_LBRC,_______, // Home and End mapped to Cmd-L/KC_R
+                _______,KC_PGUP,ANYKEY, KC_UP,  ANYKEY, KC_LBRC,_______, // Home and End mapped to Cmd-L/KC_R
                         KC_PGDN,KC_LEFT,KC_DOWN,KC_RGHT,KC_QUOT,_______,
                 _______,_______,KC_NO,  KC_UP,  KC_NO,  _______,_______,
                                 KC_LEFT,KC_DOWN,KC_RGHT,_______,_______,
@@ -205,17 +242,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,
         _______,_______,_______
     ),
+    #undef CURRENT_LAYER
 
     // MODIFIERS THAT WON'T BE STICKY
 
-    #define LAYER_FKEYS 8
     KEYMAP(  // layer 8: F-keys only
         // left hand
-        KC_FN0, KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,
+        TO_BASE,KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,
         _______,KC_F13, KC_F14, KC_F15, KC_F16, KC_NO,  _______,
         _______,KC_F17, KC_F18, KC_F19, KC_F20, KC_NO,
         _______,KC_F21, KC_F22, KC_F23, KC_F24, KC_NO,  _______,
-        KC_FN13,KC_FN13,_______,KC_LALT,KC_LGUI,
+        FN_KEYS,FN_KEYS,_______,KC_LALT,KC_LGUI,
                                                 _______,_______,
                                                         _______,
                                         KC_LCTL,KC_LSFT,_______,
@@ -231,39 +268,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 };
 
-/* id for user defined functions */
-enum function_id {
-    ANY_KEY,
-    PLOVER_SWITCH,
-    SHIFT_SWITCH,
-    FKEY_SWITCH,
-    UNUSED,
-};
-
-enum macro_id {
-    PASSWORD1,
-    PASSWORD2,
-    PASSWORD3,
-};
-
 /*
  * Fn action definition (limited to 32)
+ *
+ * Unused; everything is defined inline in the keymap.
  */
 const uint16_t PROGMEM fn_actions[] = {
-    ACTION_LAYER_SET(0, ON_PRESS),                  // FN0 - reset layer to just 0
-    ACTION_LAYER_TAP_TOGGLE(LAYER_BLUESHIFT),       // FN1 - switch to BlueShift
-    ACTION_LAYER_TAP_KEY(LAYER_MOVEMENT, KC_F21),   // FN2 - movement layer, also desktop switcher
-    ACTION_LAYER_TAP_TOGGLE(LAYER_NUMPAD),          // FN3 - numpad
-    ACTION_FUNCTION(UNUSED),                        // ** FN4 - unused
-    ACTION_FUNCTION(PLOVER_SWITCH),                 // FN5 - toggle Plover
-    ACTION_FUNCTION_OPT(ANY_KEY, LAYER_BASE),       // FN6 - AnyKey on Base
-    ACTION_FUNCTION_OPT(ANY_KEY, LAYER_NUMPAD),     // FN7 - AnyKey on Numpad
-    ACTION_FUNCTION_OPT(ANY_KEY, LAYER_BLUESHIFT),  // FN8 - AnyKey on Blueshift
-    ACTION_FUNCTION(UNUSED),                        // ** FN9 - unused
-    ACTION_MACRO(PASSWORD1),                        // FN10 - password1
-    ACTION_MACRO(PASSWORD2),                        // FN11 - password2
-    ACTION_FUNCTION(SHIFT_SWITCH),                  // FN12 - symbolized number row
-    ACTION_FUNCTION(FKEY_SWITCH),                   // FN13 - Two-button Fkey layer requires special logic to get rid of it appropriately
 };
 
 void simon_hotkey(keyevent_t event, action_t action)
@@ -462,11 +472,6 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
     }
 }
 
-/*
- * Macro definition
- */
-#include "passwords.h"
-
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 {
     keyevent_t event = record->event;
@@ -504,6 +509,23 @@ void matrix_scan_user(void)
             ergodox_board_led_on();
             break;
     }
+}
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record)
+{
+    action_t action;
+    switch (keycode) {
+        case QK_FUNCTION ... QK_FUNCTION_MAX:
+            // I've overloaded these to just have function IDs and opts
+            // in them, like ACTION_FUNCTION. Instead of referencing into
+            // fn_actions[], just call it directly.
+            action.code = keycode & 0xFFF;
+            action_function(record, action.func.id, action.func.opt);
+            return false;
+        default:
+            break;
+    }
+    return true;
 }
 
 // vim:shiftwidth=4:cindent:expandtab:tabstop=4

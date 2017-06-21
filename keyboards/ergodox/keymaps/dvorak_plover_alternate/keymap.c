@@ -469,7 +469,7 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
 /*
  * Macro definition
  */
-#include "keymap_passwords.h"
+#include "passwords.h"
 
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 {

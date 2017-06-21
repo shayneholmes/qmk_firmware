@@ -118,23 +118,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     #define LAYER_PLOVER 4
     KEYMAP(  // layer 4: Steno for Plover
         // left hand
-        KC_FN5, KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  
-        KC_NO,  KC_1,   KC_2,   KC_3,   KC_4,   KC_5,   KC_NO,  
-        KC_TRNS,KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,  
+        KC_FN5, KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,
+        KC_NO,  KC_1,   KC_2,   KC_3,   KC_4,   KC_5,   KC_NO,
+        KC_TRNS,KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,
         KC_NO,  KC_A,   KC_S,   KC_D,   KC_F,   KC_G,   KC_NO,
-        KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  
-                                      KC_FN5, KC_NO,  
-                                           KC_NO,  
-                                 KC_C,   KC_V,   KC_NO,  
+        KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,
+                                      KC_FN5, KC_NO,
+                                           KC_NO,
+                                 KC_C,   KC_V,   KC_NO,
         // right hand
              KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_TRNS,
              KC_NO,  KC_6,   KC_7,   KC_8,   KC_9,   KC_0,   KC_TRNS,
                   KC_Y,   KC_U,   KC_I,   KC_O,   KC_P,   KC_LBRC,
              KC_NO,  KC_H,   KC_J,   KC_K,   KC_L,   KC_SCLN,KC_QUOT,
-                       KC_TRNS,KC_TRNS,KC_NO,  KC_NO,  KC_NO,  
-        KC_TRNS,KC_TRNS,  
-        KC_TRNS,  
-        KC_NO,  KC_N,   KC_M   
+                       KC_TRNS,KC_TRNS,KC_NO,  KC_NO,  KC_NO,
+        KC_TRNS,KC_TRNS,
+        KC_TRNS,
+        KC_NO,  KC_N,   KC_M
     ),
 
     // MODIFIERS THAT MIGHT BE STICKY
@@ -166,7 +166,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // left hand
         KC_FN0, KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,
         KC_FN4,KC_NO,  KC_PGUP,KC_UP,  KC_PGDN,KC_NO,  KC_TRNS,
-        KC_TRNS,KC_HOME,KC_LEFT,KC_DOWN,KC_RGHT,KC_END, 
+        KC_TRNS,KC_HOME,KC_LEFT,KC_DOWN,KC_RGHT,KC_END,
         KC_TRNS,KC_NO,  KC_NO,  KC_END, KC_HOME,KC_NO,  KC_TRNS,
         KC_TRNS,KC_TRNS,KC_TRNS,KC_FN10,KC_FN11,
                                       KC_TRNS,KC_TRNS,
@@ -209,9 +209,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     #define LAYER_FKEYS 8
     KEYMAP(  // layer 8: F-keys only
         // left hand
-        KC_FN0, KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  
+        KC_FN0, KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,
         KC_TRNS,KC_F13, KC_F14, KC_F15, KC_F16, KC_NO,  KC_TRNS,
-        KC_TRNS,KC_F17, KC_F18, KC_F19, KC_F20, KC_NO,  
+        KC_TRNS,KC_F17, KC_F18, KC_F19, KC_F20, KC_NO,
         KC_TRNS,KC_F21, KC_F22, KC_F23, KC_F24, KC_NO,  KC_TRNS,
         KC_FN13,KC_FN13,KC_TRNS,KC_LALT,KC_LGUI,
                                       KC_TRNS,KC_TRNS,
@@ -434,7 +434,7 @@ bool is_out_of_order_fkey_release(keyevent_t event, uint32_t layer_state) {
 
 void action_fkey(keyevent_t event) {
     layer_invert(LAYER_FKEYS);
-    if (is_out_of_order_fkey_release(event, layer_state)) { 
+    if (is_out_of_order_fkey_release(event, layer_state)) {
         layer_invert(LAYER_NUMPAD);
         layer_invert(LAYER_BLUESHIFT);
     }

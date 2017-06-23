@@ -70,7 +70,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // BASE LAYERS
 
     #define CURRENT_LAYER LAYER_BASE
-    KEYMAP(  // layer 0: customized qwerty with symbol row switched
+    [LAYER_BASE] = KEYMAP(  // customized qwerty with symbol row switched
         // left hand
         ANYKEY, SHIFTED,SHIFTED,SHIFTED,SHIFTED,SHIFTED,KC_F17,
         KC_TAB, ANYKEY, KC_W,   KC_E,   KC_R,   KC_T,   LT_MOVE,
@@ -92,7 +92,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     #undef CURRENT_LAYER
 
-    KEYMAP(  // layer 1: transparent because this gets triggered more than I'd like
+    KEYMAP(  // transparent because this gets triggered more than I'd like
         // left hand
         _______,_______,_______,_______,_______,_______,_______,
         _______,_______,_______,_______,_______,_______,_______,
@@ -113,7 +113,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,_______,_______
     ),
 
-    KEYMAP(  // layer 2: customized dvorak
+    KEYMAP(  // customized dvorak
         // left hand
         KC_ESC, KC_1,   KC_2,   KC_3,   KC_4,   KC_5,   KC_BSLS,
         KC_TAB, KC_QUOT,KC_COMM,KC_DOT, KC_P,   KC_Y,   LT_MOVE,
@@ -134,7 +134,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_ENT, TT_BLUE,KC_SPC
     ),
 
-    KEYMAP(  // layer 3 : qwerty
+    KEYMAP(  // qwerty
         // left hand
         _______,KC_1,   KC_2,   KC_3,   KC_4,   KC_5,   _______,
         _______,KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,   _______,
@@ -157,7 +157,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // PLOVER (SPECIAL CASE)
 
-    KEYMAP(  // layer 4: Steno for Plover
+    [LAYER_PLOVER] = KEYMAP(  // Steno for Plover
         // left hand
         PLOVER, KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,
         KC_NO,  KC_1,   KC_2,   KC_3,   KC_4,   KC_5,   KC_NO,
@@ -181,7 +181,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // MODIFIERS THAT MIGHT BE STICKY
 
     #define CURRENT_LAYER LAYER_NUMPAD
-    KEYMAP(  // layer 5: mouse + numpad
+    [LAYER_NUMPAD] = KEYMAP(  // mouse + numpad
         // left hand
         TO_BASE,KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_PAUS,KC_PSCR,
         _______,KC_NO,  KC_WH_U,KC_MS_U,KC_WH_D,KC_BTN2,_______,
@@ -203,7 +203,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     #undef CURRENT_LAYER
 
-    KEYMAP(  // layer 6: F-keys + cursor
+    [LAYER_MOVEMENT] = KEYMAP(  // F-keys + cursor
         // left hand
         TO_BASE,KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,
         RESET,  KC_NO,  KC_PGUP,KC_UP,  KC_PGDN,KC_NO,  _______,
@@ -224,7 +224,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     #define CURRENT_LAYER LAYER_BLUESHIFT
-    KEYMAP(  // layer 7: "BlueShift"
+    [LAYER_BLUESHIFT] = KEYMAP(  // "BlueShift"
         // left hand
         TO_BASE,KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,
         _______,SHIFTED,SHIFTED,SHIFTED,KC_PSCR,KC_BSLS,_______,  // the SHIFTED entries are for tilde and inverted brace/bracket keys
@@ -248,7 +248,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // MODIFIERS THAT WON'T BE STICKY
 
-    KEYMAP(  // layer 8: F-keys only
+    [LAYER_FKEYS] = KEYMAP(  // F-keys only
         // left hand
         TO_BASE,KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,
         _______,KC_F13, KC_F14, KC_F15, KC_F16, KC_NO,  _______,

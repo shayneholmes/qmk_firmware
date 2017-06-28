@@ -45,6 +45,8 @@ enum macro_id {
 #define PASSWD2 M(PASSWORD2)
 #define PASSWD3 M(PASSWORD3)
 
+#define SCRNSVR LSFT(LCTL(LALT(DV_R)))
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Keymap 0: Default Layer
      *
@@ -87,7 +89,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                         KC_H,   KC_J,   KC_K,   KC_L,   KC_SCLN,KC_RSFT,
                 KC_DEL, KC_N,   KC_M,   KC_COMM,KC_DOT, KC_SLSH,KC_RCTL,
                                 KC_RGUI,KC_RALT,KC_RCTL,ANYKEY, LT_MOVE,
-        KC_F13, KC_MPLY,
+        SCRNSVR,KC_MPLY,
         KC_F14,
         KC_ENT, TT_BLUE,KC_SPC
     ),

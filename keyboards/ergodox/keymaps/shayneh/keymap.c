@@ -22,6 +22,15 @@ enum macro_id {
 };
 #include "passwords.h"
 
+// Tap Dance Definitions
+enum tap_dance_custom_keys {
+  TD_SEMICOLON_COLON = 0
+};
+
+qk_tap_dance_action_t tap_dance_actions[] = {
+  [TD_SEMICOLON_COLON] = ACTION_TAP_DANCE_DOUBLE(KC_SCLN, KC_COLON)
+};
+
 #define _______ KC_TRNS
 #define LAYER_BASE 0
 #define LAYER_PLOVER 4

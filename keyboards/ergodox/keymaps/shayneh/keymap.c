@@ -43,6 +43,7 @@ enum macro_id {
 #define LT_MOVE LT(LAYER_MOVEMENT, KC_F21)
 #define PASSWD1 M(PASSWORD1)
 #define PASSWD2 M(PASSWORD2)
+#define PASSWD3 M(PASSWORD3)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Keymap 0: Default Layer
@@ -77,7 +78,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_LSFT,KC_A,   KC_S,   KC_D,   KC_F,   KC_G,
         KC_LCTL,KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   KC_DEL,
         TT_NUM, TT_BLUE,KC_LCTL,KC_LALT,KC_LGUI,
-                                                PLOVER, KC_F15,
+                                                PLOVER, KC_LEAD,
                                                         KC_F16,
                                        KC_BSPC,KC_LSFT,KC_LGUI,
         // right hand
@@ -503,14 +504,19 @@ void send_string(const char *str) {
     }
 }
 
+const macro_t *get_macro(uint8_t id, uint8_t opt) {
+    switch (id) {
+        case PASSWORD1: MACRO_PASSWORD1;
+        case PASSWORD2: MACRO_PASSWORD2;
+        case PASSWORD3: MACRO_PASSWORD3;
+    }
+    return MACRO_NONE;
+}
+
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 {
     if (record->event.pressed) {
-        switch (id) {
-            case PASSWORD1: MACRO_PASSWORD1;
-            case PASSWORD2: MACRO_PASSWORD2;
-            case PASSWORD3: MACRO_PASSWORD3;
-        }
+        return get_macro(id, opt);
     }
     return MACRO_NONE;
 }
@@ -525,6 +531,8 @@ void matrix_init_user(void)
     ergodox_board_led_off();
 }
 
+LEADER_EXTERNS();
+
 void matrix_scan_user(void)
 {
     uint8_t layer = biton32(layer_state);
@@ -537,6 +545,21 @@ void matrix_scan_user(void)
         default:
             ergodox_board_led_on();
             break;
+    }
+
+    LEADER_DICTIONARY() {
+        leading = false;
+        leader_end();
+
+        SEQ_ONE_KEY(DV_Q) {
+            action_macro_play(get_macro(PASSWORD1, 0));
+        }
+        SEQ_ONE_KEY(DV_L) {
+            action_macro_play(get_macro(PASSWORD2, 0));
+        }
+        SEQ_ONE_KEY(DV_K) {
+            action_macro_play(get_macro(PASSWORD3, 0));
+        }
     }
 }
 

@@ -11,6 +11,9 @@
 #define MATRIX_ROW_PINS { B0, E7, F0, F1 }
 #define MATRIX_COL_PINS { E6, E3, E4, D3, D4, D5, C0, A7, A6, E1, E0, D7 }
 
+#define C6_AUDIO
+#define B5_AUDIO
+
 #undef BACKLIGHT_PIN
 
 #define BACKLIGHT_PIN A5

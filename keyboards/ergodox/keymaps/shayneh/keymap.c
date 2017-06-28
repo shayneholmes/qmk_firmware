@@ -229,7 +229,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // left hand
         TO_BASE,KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,
         _______,SHIFTED,SHIFTED,SHIFTED,KC_PSCR,KC_BSLS,_______,  // the SHIFTED entries are for tilde and inverted brace/bracket keys
-        _______,KC_APP, KC_TAB, KC_RBRC,KC_QUOT,KC_INS,
+        _______,KC_APP, KC_TAB, DV_EQL, DV_MINS,KC_INS,
         _______,_______,ANYKEY, _______,KC_CAPS,_______,_______,  // quit (alt+f4)
         FN_KEYS,_______,_______,_______,_______,
                                                 _______,_______,
@@ -237,8 +237,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                         _______,_______,_______,
         // right hand
                 KC_F7,  KC_F8,  KC_F9,  KC_F10, KC_F11, KC_F12, _______,
-                _______,KC_PGUP,ANYKEY, KC_UP,  ANYKEY, KC_LBRC,_______, // Home and End mapped to Cmd-L/KC_R
-                        KC_PGDN,KC_LEFT,KC_DOWN,KC_RGHT,KC_QUOT,_______,
+                _______,KC_PGUP,ANYKEY, KC_UP,  ANYKEY, DV_SLSH,_______, // Home and End mapped to Cmd-L/KC_R
+                        KC_PGDN,KC_LEFT,KC_DOWN,KC_RGHT,DV_MINS,_______,
                 _______,_______,KC_NO,  KC_UP,  KC_NO,  _______,_______,
                                 KC_LEFT,KC_DOWN,KC_RGHT,_______,_______,
         _______,_______,

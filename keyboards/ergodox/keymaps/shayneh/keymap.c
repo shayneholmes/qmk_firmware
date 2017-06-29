@@ -24,7 +24,7 @@ enum macro_id {
 
 // Tap Dance Definitions
 enum tap_dance_custom_keys {
-  TD_SEMICOLON_COLON = 0
+  TD_SEMICOLON_COLON,
 };
 
 qk_tap_dance_action_t tap_dance_actions[] = {

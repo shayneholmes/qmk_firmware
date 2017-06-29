@@ -397,6 +397,8 @@ uint8_t get_shiftswitch_key(keyrecord_t *record) {
 }
 
 void action_shiftswitch(keyrecord_t *record) {
+    if (!record->event.pressed) return; // tap these keys when they're pressed
+
     uint8_t keycode = get_shiftswitch_key(record);
     if (keycode == KC_NO) return;
 
@@ -410,12 +412,14 @@ void action_shiftswitch(keyrecord_t *record) {
     if (shift_pressed) {
         del_mods(MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT));
         send_keyboard_report();
-        process_action(record, action);
+    }
+    process_action(record, action);
+    record->event.pressed = false;
+    process_action(record, action);
+    record->event.pressed = true;
+    if (shift_pressed) {
         set_mods(savedmods);
         send_keyboard_report();
-    } else {
-        process_action(record, action);
-        del_weak_mods(MOD_BIT(KC_LSFT));
     }
 }
 

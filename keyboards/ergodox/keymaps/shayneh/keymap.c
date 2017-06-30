@@ -1,8 +1,6 @@
 #include "ergodox.h"
 #include "keymap_dvorak.h"
 #include "keymap_plover.h"
-#include "action_util.h"
-#include "action_layer.h"
 
 /* id for user defined functions */
 enum function_id {

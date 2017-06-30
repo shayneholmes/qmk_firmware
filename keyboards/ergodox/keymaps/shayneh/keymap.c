@@ -2,6 +2,11 @@
 #include "keymap_dvorak.h"
 #include "keymap_plover.h"
 
+#include "sendstring_dvorak.h"
+
+#undef SEND_STRING
+#define SEND_STRING(str) send_string_with_delay(PSTR(str), 15)
+
 /* id for user defined functions */
 enum function_id {
     ANY_KEY,

@@ -1,5 +1,6 @@
 #include "ergodox.h"
 #include "keymap_dvorak.h"
+#include "keymap_plover.h"
 #include "action_util.h"
 #include "action_layer.h"
 
@@ -172,22 +173,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [LAYER_PLOVER] = KEYMAP(  // Steno for Plover
         // left hand
         PLOVER, KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,
-        KC_NO,  KC_1,   KC_2,   KC_3,   KC_4,   KC_5,   KC_NO,
-        _______,KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,
-        KC_NO,  KC_A,   KC_S,   KC_D,   KC_F,   KC_G,   KC_NO,
+        KC_NO,  PV_NUM, PV_NUM, PV_NUM, PV_NUM, PV_NUM, KC_NO,
+        _______,PV_LS,  PV_LT,  PV_LP,  PV_LH,  KC_T,
+        KC_NO,  KC_A,   PV_LK,  PV_LW,  PV_LR,  KC_G,   KC_NO,
         KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,
                                                 PLOVER, KC_NO,
                                                         KC_NO,
-                                        KC_C,   KC_V,   KC_NO,
+                                        PV_A,   PV_O,   KC_NO,
         // right hand
                 KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  KC_NO,  _______,
-                KC_NO,  KC_6,   KC_7,   KC_8,   KC_9,   KC_0,   _______,
-                        KC_Y,   KC_U,   KC_I,   KC_O,   KC_P,   KC_LBRC,
-                KC_NO,  KC_H,   KC_J,   KC_K,   KC_L,   KC_SCLN,KC_QUOT,
+                KC_NO,  PV_NUM, PV_NUM, PV_NUM, PV_NUM, PV_NUM, _______,
+                        PV_STAR,PV_RF,  PV_RP,  PV_RL,  PV_RT,  PV_RD,
+                KC_NO,  KC_H,   PV_RR,  PV_RB,  PV_RG,  PV_RS,  PV_RZ,
                                 _______,_______,KC_NO,  KC_NO,  KC_NO,
         _______,_______,
         _______,
-        KC_NO,  KC_N,   KC_M
+        KC_NO,  PV_E,   PV_U
     ),
 
     // MODIFIERS THAT MIGHT BE STICKY

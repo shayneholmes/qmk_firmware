@@ -23,6 +23,7 @@ enum macro_id {
     PASSWORD1,
     PASSWORD2,
     PASSWORD3,
+    PASSWORD4,
 };
 #include "passwords.h"
 
@@ -58,6 +59,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 #define PASSWD1 M(PASSWORD1)
 #define PASSWD2 M(PASSWORD2)
 #define PASSWD3 M(PASSWORD3)
+#define PASSWD4 M(PASSWORD4)
 
 #define SCRNSVR LSFT(LCTL(LALT(DV_R)))
 
@@ -469,6 +471,7 @@ const macro_t *get_macro(uint8_t id, uint8_t opt) {
         case PASSWORD1: MACRO_PASSWORD1;
         case PASSWORD2: MACRO_PASSWORD2;
         case PASSWORD3: MACRO_PASSWORD3;
+        case PASSWORD4: MACRO_PASSWORD4;
     }
     return MACRO_NONE;
 }
@@ -519,6 +522,9 @@ void matrix_scan_user(void)
         }
         SEQ_ONE_KEY(DV_K) {
             action_macro_play(get_macro(PASSWORD3, 0));
+        }
+        SEQ_ONE_KEY(DV_A) {
+            action_macro_play(get_macro(PASSWORD4, 0));
         }
     }
 }

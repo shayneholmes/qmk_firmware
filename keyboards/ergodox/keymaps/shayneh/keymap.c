@@ -464,66 +464,6 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
     }
 }
 
-const bool ascii_to_shift_lut[0x80] PROGMEM = {
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 1, 1, 1, 1, 1, 1, 0,
-    1, 1, 1, 1, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 1, 0, 1, 0, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 0, 0, 0, 1, 1,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 1, 1, 1, 1, 0
-};
-
-const uint8_t ascii_to_keycode_lut[0x80] PROGMEM = {
-    0, 0, 0, 0, 0, 0, 0, 0,
-    KC_BSPC, KC_TAB, KC_ENT, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, KC_ESC, 0, 0, 0, 0,
-    KC_SPC, DV_1, DV_QUOT, DV_3, DV_4, DV_5, DV_7, DV_QUOT,
-    DV_9, DV_0, DV_8, DV_EQL, DV_COMM, DV_MINS, DV_DOT, DV_SLSH,
-    DV_0, DV_1, DV_2, DV_3, DV_4, DV_5, DV_6, DV_7,
-    DV_8, DV_9, DV_SCLN, DV_SCLN, DV_COMM, DV_EQL, DV_DOT, DV_SLSH,
-    DV_2, DV_A, DV_B, DV_C, DV_D, DV_E, DV_F, DV_G,
-    DV_H, DV_I, DV_J, DV_K, DV_L, DV_M, DV_N, DV_O,
-    DV_P, DV_Q, DV_R, DV_S, DV_T, DV_U, DV_V, DV_W,
-    DV_X, DV_Y, DV_Z, DV_LBRC, DV_BSLS, DV_RBRC, DV_6, DV_MINS,
-    DV_GRV, DV_A, DV_B, DV_C, DV_D, DV_E, DV_F, DV_G,
-    DV_H, DV_I, DV_J, DV_K, DV_L, DV_M, DV_N, DV_O,
-    DV_P, DV_Q, DV_R, DV_S, DV_T, DV_U, DV_V, DV_W,
-    DV_X, DV_Y, DV_Z, DV_LBRC, DV_BSLS, DV_RBRC, DV_GRV, KC_DEL
-};
-
-void send_string(const char *str) {
-    while (1) {
-        uint8_t keycode;
-        uint8_t ascii_code = pgm_read_byte(str);
-        if (!ascii_code) break;
-        keycode = pgm_read_byte(&ascii_to_keycode_lut[ascii_code]);
-        if (pgm_read_byte(&ascii_to_shift_lut[ascii_code])) {
-            register_code(KC_LSFT);
-            register_code(keycode);
-            unregister_code(keycode);
-            unregister_code(KC_LSFT);
-        }
-        else {
-            register_code(keycode);
-            unregister_code(keycode);
-        }
-        ++str;
-        // interval
-        { uint8_t ms = 15; while (ms--) wait_ms(1); }
-    }
-}
-
 const macro_t *get_macro(uint8_t id, uint8_t opt) {
     switch (id) {
         case PASSWORD1: MACRO_PASSWORD1;

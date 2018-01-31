@@ -110,7 +110,7 @@ endif
 
 # Set the default goal depending on where we are running make from
 # this handles the case where you run make without any arguments
-.DEFAULT_GOAL := all
+.DEFAULT_GOAL := ergodox_ez:shayneh
 ifneq ($(KEYMAP),)
     ifeq ($(SUBPROJECT),)
          # Inside a keymap folder, just build the keymap, with the

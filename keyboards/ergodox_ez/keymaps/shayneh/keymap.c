@@ -5,7 +5,7 @@
 #include "sendstring_dvorak.h"
 
 #undef SEND_STRING
-#define SEND_STRING(str) send_string_with_delay(PSTR(str), 15)
+#define SEND_STRING(str) send_string_with_delay_P(PSTR(str), 15)
 
 /* id for user defined functions */
 enum function_id {

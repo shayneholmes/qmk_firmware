@@ -11,7 +11,7 @@
 #define DESCRIPTION     QMK firmware for Ergodox; with a custom layout by ShayneH
 
 #undef  TAPPING_TOGGLE
-#define TAPPING_TOGGLE  3
+#define TAPPING_TOGGLE  2
 #undef  TAPPING_TERM
 #define TAPPING_TERM    230
 

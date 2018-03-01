@@ -253,7 +253,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                         _______,_______,_______,
         // right hand
                 KC_F7,  KC_F8,  KC_F9,  KC_F10, KC_F11, KC_F12, _______,
-                _______,KC_PGUP,ANYKEY, KC_UP,  ANYKEY, DV_SLSH,_______, // Home and End mapped to Cmd-L/KC_R
+                _______,KC_PGUP,KC_HOME,KC_UP,  KC_END, DV_SLSH,_______,
                         KC_PGDN,KC_LEFT,KC_DOWN,KC_RGHT,DV_MINS,_______,
                 _______,_______,XXXXXXX,KC_UP,  XXXXXXX,_______,_______,
                                 KC_LEFT,KC_DOWN,KC_RGHT,_______,_______,
@@ -330,14 +330,6 @@ uint16_t get_any_key_action(keyrecord_t *record, uint8_t layer) {
     uint8_t row = record->event.key.row;
 
     switch (layer) {
-        case LAYER_BLUESHIFT:
-            if (col == 1) {
-                switch (row) {
-                    case 9:  return ACTION_MODS_KEY(MOD_LGUI, KC_LEFT); // Home
-                    case 11: return ACTION_MODS_KEY(MOD_LGUI, KC_RGHT); // End
-                }
-            }
-            break;
         case LAYER_NUMPAD:
             if (col == 3 && row == 1) {
                 return ACTION_MODS_KEY(MOD_LSFT, DV_SCLN); // :

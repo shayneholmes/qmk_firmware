@@ -1,3 +1,8 @@
+/**
+ * Use this file privately by copying it to passwords.h and changing it there.
+ * It will get ignored by git.
+ */
+
 #define MACRO_PASSWORD1     SEND_STRING("Example!\n"); return false
 
 #define MACRO_PASSWORD2     SEND_STRING("Another example... "); return false

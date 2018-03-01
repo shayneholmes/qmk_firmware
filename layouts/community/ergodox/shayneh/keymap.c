@@ -24,7 +24,11 @@ enum macro_id {
     PASSWORD2,
     PASSWORD3,
 };
+#ifdef SHAYNEH_PASSWORDS_H
 #include "passwords.h"
+#else
+#include "passwords_example.h"
+#endif
 
 // Tap Dance Definitions
 enum tap_dance_custom_keys {

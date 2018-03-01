@@ -15,3 +15,7 @@ SLEEP_LED_ENABLE := no       # Breathing sleep LED during USB suspend
 
 UNICODEMAP_ENABLE := no
 UNICODE_ENABLE := no
+
+ifdef $(test -f ./passwords.h && echo "present")
+  DEFINE=-DSHAYNEH_PASSWORDS_H
+endif

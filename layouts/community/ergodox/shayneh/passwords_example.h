@@ -3,9 +3,11 @@
  * It will get ignored by git.
  */
 
-#define MACRO_PASSWORD1     SEND_STRING("Example!\n"); return false
+#define SEND_STRING_DELAY(str) send_string_with_delay_P(PSTR(str), 15)
 
-#define MACRO_PASSWORD2     SEND_STRING("Another example... "); return false
+#define MACRO_PASSWORD1     SEND_STRING_DELAY("Example!\n"); return false
+
+#define MACRO_PASSWORD2     SEND_STRING_DELAY("Another example... "); return false
 
 #define MACRO_PASSWORD3     return MACRO( \
                                 I(15), \

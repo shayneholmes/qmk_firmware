@@ -4,8 +4,11 @@
 
 #include "sendstring_dvorak.h"
 
-#undef SEND_STRING
-#define SEND_STRING(str) send_string_with_delay_P(PSTR(str), 15)
+#ifdef SHAYNEH_PASSWORDS_H
+#include "passwords.h"
+#else
+#include "passwords_example.h"
+#endif
 
 /* id for user defined functions */
 enum function_id {
@@ -24,11 +27,6 @@ enum macro_id {
     PASSWORD2,
     PASSWORD3,
 };
-#ifdef SHAYNEH_PASSWORDS_H
-#include "passwords.h"
-#else
-#include "passwords_example.h"
-#endif
 
 // Tap Dance Definitions
 enum tap_dance_custom_keys {

@@ -177,11 +177,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // PLOVER (SPECIAL CASE)
 
     [LAYER_PLOVER] = KEYMAP(  // Steno for Plover
+        // transparencies are for media keys
+
         // left hand
         PLOVER, XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
         XXXXXXX,PV_NUM, PV_NUM, PV_NUM, PV_NUM, PV_NUM, XXXXXXX,
-        _______,PV_LS,  PV_LT,  PV_LP,  PV_LH,  KC_T,
-        XXXXXXX,KC_A,   PV_LK,  PV_LW,  PV_LR,  KC_G,   XXXXXXX,
+        _______,PV_LS,  PV_LT,  PV_LP,  PV_LH,  PV_STAR,
+        XXXXXXX,PV_LS,  PV_LK,  PV_LW,  PV_LR,  PV_STAR,XXXXXXX,
         XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
                                                 PLOVER, XXXXXXX,
                                                         XXXXXXX,
@@ -190,7 +192,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                 XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,_______,
                 XXXXXXX,PV_NUM, PV_NUM, PV_NUM, PV_NUM, PV_NUM, _______,
                         PV_STAR,PV_RF,  PV_RP,  PV_RL,  PV_RT,  PV_RD,
-                XXXXXXX,KC_H,   PV_RR,  PV_RB,  PV_RG,  PV_RS,  PV_RZ,
+                XXXXXXX,PV_STAR,PV_RR,  PV_RB,  PV_RG,  PV_RS,  PV_RZ,
                                 _______,_______,XXXXXXX,XXXXXXX,XXXXXXX,
         _______,_______,
         _______,

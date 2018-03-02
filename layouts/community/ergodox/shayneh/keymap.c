@@ -89,6 +89,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // BASE LAYERS
 
     #define CURRENT_LAYER LAYER_BASE
+    #define ALTTAB LGUI(KC_TAB)
     [LAYER_BASE] = KEYMAP(  // customized qwerty with symbol row switched
         // left hand
         ANYKEY, SHIFTED,SHIFTED,SHIFTED,SHIFTED,SHIFTED,KC_F17,
@@ -104,7 +105,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                 TT_NUM, KC_Y,   KC_U,   KC_I,   KC_O,   KC_P,   ANYKEY,
                         KC_H,   KC_J,   KC_K,   KC_L,   KC_SCLN,KC_RSFT,
                 KC_DEL, KC_N,   KC_M,   KC_COMM,KC_DOT, KC_SLSH,KC_RCTL,
-                                KC_RGUI,KC_RALT,KC_RCTL,ANYKEY, LT_MOVE,
+                                KC_RGUI,KC_RALT,KC_RCTL,ALTTAB, LT_MOVE,
         SCRNSVR,KC_MPLY,
         KC_F14,
         KC_ENT, TT_BLUE,KC_SPC
@@ -203,11 +204,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     #define CURRENT_LAYER LAYER_NUMPAD
     [LAYER_NUMPAD] = KEYMAP(  // mouse + numpad
+        #define NUM_CLN LSFT(DV_SCLN)
         // left hand
         TO_BASE,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,KC_PAUS,KC_PSCR,
         _______,XXXXXXX,KC_WH_U,KC_MS_U,KC_WH_D,KC_BTN2,_______,
         _______,XXXXXXX,KC_MS_L,KC_MS_D,KC_MS_R,KC_BTN1,
-        _______,ANYKEY, XXXXXXX,XXXXXXX,XXXXXXX,KC_BTN3,_______,
+        _______,NUM_CLN,XXXXXXX,XXXXXXX,XXXXXXX,KC_BTN3,_______,
         _______,FN_KEYS,_______,_______,_______,
                                                 _______,_______,
                                                         _______,
@@ -250,7 +252,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         TO_BASE,KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,
         _______,SHIFTED,SHIFTED,SHIFTED,KC_PSCR,KC_BSLS,_______,  // the SHIFTED entries are for tilde and inverted brace/bracket keys
         _______,KC_APP, KC_TAB, DV_EQL, DV_MINS,KC_INS,
-        _______,_______,ANYKEY, _______,KC_CAPS,_______,_______,  // quit (alt+f4)
+        _______,_______,_______,_______,KC_CAPS,_______,_______,
         FN_KEYS,_______,_______,_______,_______,
                                                 _______,_______,
                                                         _______,
@@ -344,15 +346,8 @@ uint16_t get_any_key_action(keyrecord_t *record, uint8_t layer) {
     uint8_t row = record->event.key.row;
 
     switch (layer) {
-        case LAYER_NUMPAD:
-            if (col == 3 && row == 1) {
-                return ACTION_MODS_KEY(MOD_LSFT, DV_SCLN); // :
-            }
-            break;
         case LAYER_BASE:
-            if (col == 4 && row == 12) {
-                return ACTION_MODS_KEY(MOD_LGUI, KC_TAB); // Alt+tab
-            } else if (col == 1 && row == 1) { // apostrophe / CMD+`
+            if (col == 1 && row == 1) { // apostrophe / CMD+`
                 return key_depending_on_mods(record, DV_QUOT, KC_GRV, MOD_BIT(KC_LGUI) | MOD_BIT(KC_RGUI));
             } else if (col == 1 && row == 13) { // media forward/back
                 return key_depending_on_mods(record, KC_MEDIA_NEXT_TRACK, KC_MEDIA_PREV_TRACK, MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT));

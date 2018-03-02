@@ -313,10 +313,20 @@ void action_plover_key(keyrecord_t *record) {
     layer_invert(LAYER_PLOVER);
     if (turning_on) {
         // PHROPB
-        action_macro_play(MACRO(D(E), D(R), D(F), D(V), D(I), D(K), U(E), U(R), U(F), U(V), U(I), U(K), END));
+        action_macro_play(MACRO(
+                    DOWN(PV_LP), DOWN(PV_LH), DOWN(PV_LR),
+                    DOWN(PV_O), DOWN(PV_RP), DOWN(PV_RB),
+                    UP(PV_LP), UP(PV_LH), UP(PV_LR),
+                    UP(PV_O), UP(PV_RP), UP(PV_RB),
+                    END));
     } else {
         // PHRO*F
-        action_macro_play(MACRO(D(E), D(R), D(F), D(V), D(Y), D(U), U(E), U(R), U(F), U(V), U(Y), U(U), END));
+        action_macro_play(MACRO(
+                    DOWN(PV_LP), DOWN(PV_LH), DOWN(PV_LR),
+                    DOWN(PV_O), DOWN(PV_STAR), DOWN(PV_RF),
+                    UP(PV_LP), UP(PV_LH), UP(PV_LR),
+                    UP(PV_O), UP(PV_STAR), UP(PV_RF),
+                    END));
     }
 }
 

@@ -131,7 +131,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // BASE LAYERS
 
-    #define CURRENT_LAYER LAYER_BASE
     [LAYER_BASE] = KEYMAP(  // customized qwerty with symbol row switched
         // left hand
         SP_ESCD,TSFT_1, TSFT_2, TSFT_3, TSFT_4, TSFT_5, KC_F17,
@@ -152,7 +151,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_F14,
         KC_ENT, TT_BLUE,KC_SPC
     ),
-    #undef CURRENT_LAYER
 
     KEYMAP(  // transparent because this gets triggered more than I'd like
         // left hand
@@ -244,7 +242,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // MODIFIERS THAT MIGHT BE STICKY
 
-    #define CURRENT_LAYER LAYER_NUMPAD
     [LAYER_NUMPAD] = KEYMAP(  // mouse + numpad
         #define NUM_CLN LSFT(DV_SCLN)
         // left hand
@@ -266,7 +263,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,
         KC_ENT, _______,_______
     ),
-    #undef CURRENT_LAYER
 
     [LAYER_MOVEMENT] = KEYMAP(  // F-keys + cursor
         // left hand
@@ -288,7 +284,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______,KC_RSFT,KC_RCTL
     ),
 
-    #define CURRENT_LAYER LAYER_BLUESHIFT
     [LAYER_BLUESHIFT] = KEYMAP(  // "BlueShift"
         // left hand
         TO_BASE,KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,
@@ -309,11 +304,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,
         _______,_______,_______
     ),
-    #undef CURRENT_LAYER
 
     // MODIFIERS THAT WON'T BE STICKY
 
-    #define CURRENT_LAYER LAYER_FKEYS
     [LAYER_FKEYS] = KEYMAP(  // F-keys only
         // left hand
         TO_BASE,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
@@ -334,7 +327,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,
         _______,KC_RSFT,KC_RCTL
     ),
-    #undef CURRENT_LAYER
 };
 
 /*

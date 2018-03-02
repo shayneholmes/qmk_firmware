@@ -15,7 +15,7 @@ enum function_id {
     SPECIAL_KEY,
     PLOVER_SWITCH,
     TOGGLE_SHIFT,
-    FKEY_SWITCH,
+    TWO_LAYER_SWITCH,
     UNUSED,
 };
 
@@ -93,7 +93,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 #define TSFT_R TOGGLE_SHIFT(SHIFT_RBRC)
 
 #define PLOVER F(PLOVER_SWITCH)
-#define FN_KEYS F(FKEY_SWITCH)
+#define FN_KEYS FOPT(TWO_LAYER_SWITCH, LAYER_FKEYS)
 
 #define TO_BASE TO(LAYER_BASE)
 #define TT_BLUE TT(LAYER_BLUESHIFT)
@@ -448,20 +448,23 @@ void action_toggle_shift(keyrecord_t *record, uint8_t opt) {
 }
 
 /* Coordinate switching to target_layer with two buttons, one of each pointing to layer1 and layer2 */
-void action_two_layer_switch(uint8_t layer1, uint8_t layer2, uint8_t target_layer, keyrecord_t *record) {
-    static uint8_t layer;
+void action_two_layer_switch(keyrecord_t *record, uint8_t target_layer) {
+    static uint8_t layer1;
+    static keypos_t key1;
     if (record->event.pressed) {
         // save how we got here for later reference
-        layer = layer_switch_get_layer(record->event.key);
-        if (layer != layer1 && layer != layer2) {
-            print("Two-layer switch activated from neither originating layer. Something's not right.\n");
-        }
+        key1 = record->event.key;
+        layer1 = layer_switch_get_layer(key1);
     }
     layer_invert(target_layer);
     if (!record->event.pressed) {
-        if (layer != layer_switch_get_layer(record->event.key)) {
+        uint8_t layer = layer_switch_get_layer(record->event.key);
+        if (layer != layer1) {
             // we removed the top layer, but the released key doesn't exist on this layer
             // out of order release; flip the layers
+            uint16_t keycode = keymap_key_to_keycode(layer, key1);
+            uint8_t layer2 = keycode & 0xFF; // assume this is a layer macro
+
             layer_invert(layer1);
             layer_invert(layer2);
         }
@@ -477,8 +480,8 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
             return action_special_key(record, opt);
         case TOGGLE_SHIFT:
             return action_toggle_shift(record, opt);
-        case FKEY_SWITCH:
-            return action_two_layer_switch(LAYER_NUMPAD, LAYER_BLUESHIFT, LAYER_FKEYS, record);
+        case TWO_LAYER_SWITCH:
+            return action_two_layer_switch(record, opt);
         default:
             print("Unknown action_function called\n");
             print("id  = "); phex(id); print("\n");

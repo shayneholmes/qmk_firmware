@@ -15,4 +15,6 @@
 #undef  TAPPING_TERM
 #define TAPPING_TERM    230
 
+#undef PREVENT_STUCK_MODIFIERS
+
 #endif

@@ -313,6 +313,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // MODIFIERS THAT WON'T BE STICKY
 
+    #define CURRENT_LAYER LAYER_FKEYS
     [LAYER_FKEYS] = KEYMAP(  // F-keys only
         // left hand
         TO_BASE,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
@@ -333,6 +334,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,
         _______,KC_RSFT,KC_RCTL
     ),
+    #undef CURRENT_LAYER
 };
 
 /*
@@ -412,7 +414,7 @@ void action_special_key(keyrecord_t *record, uint8_t opt) {
     }
 }
 
-inline uint8_t action_shiftswitch_get_keycode(uint8_t opt) {
+inline uint8_t action_toggle_shift_get_keycode(uint8_t opt) {
     // Unpack the 4-bit option into to an 8-bit keycode
     switch(opt) {
         case SHIFT_1: return KC_1;
@@ -432,20 +434,13 @@ inline uint8_t action_shiftswitch_get_keycode(uint8_t opt) {
     }
 };
 
-void action_shiftswitch(keyrecord_t *record, uint8_t opt) {
-    if (!record->event.pressed) return; // tap these keys when they're pressed
-
-    uint8_t keycode = action_shiftswitch_get_keycode(opt);
-
+void action_toggle_shift(keyrecord_t *record, uint8_t opt) {
+    if (!record->event.pressed) return; // tap these keys only when they're pressed
+    uint8_t keycode = action_toggle_shift_get_keycode(opt);
     if (keycode == KC_NO) return;
-
     uint8_t savedmods = get_mods();
-
-    action_t action;
-    action.code = ACTION_MODS_KEY(savedmods ? 0 : MOD_LSFT, keycode);
-
+    action_t action = {.code = ACTION_MODS_KEY(savedmods ? 0 : MOD_LSFT, keycode)};
     bool shift_pressed = savedmods & (MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT));
-
     if (shift_pressed) {
         del_mods(MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT));
         send_keyboard_report();
@@ -460,20 +455,24 @@ void action_shiftswitch(keyrecord_t *record, uint8_t opt) {
     }
 }
 
-bool is_out_of_order_fkey_release(keyrecord_t *record, uint32_t layer_state) {
-    if (!record->event.pressed) return false;
-
-    uint8_t row = record->event.key.row;
-    return
-        ((row == 0) && (layer_state & 1<<LAYER_NUMPAD)) ||
-        ((row == 1) && (layer_state & 1<<LAYER_BLUESHIFT));
-}
-
-void action_fkey(keyrecord_t *record) {
-    layer_invert(LAYER_FKEYS);
-    if (is_out_of_order_fkey_release(record, layer_state)) {
-        layer_invert(LAYER_NUMPAD);
-        layer_invert(LAYER_BLUESHIFT);
+/* Coordinate switching to target_layer with two buttons, one of each pointing to layer1 and layer2 */
+void action_two_layer_switch(uint8_t layer1, uint8_t layer2, uint8_t target_layer, keyrecord_t *record) {
+    static uint8_t layer;
+    if (record->event.pressed) {
+        // save how we got here for later reference
+        layer = layer_switch_get_layer(record->event.key);
+        if (layer != layer1 && layer != layer2) {
+            print("Two-layer switch activated from neither originating layer. Something's not right.\n");
+        }
+    }
+    layer_invert(target_layer);
+    if (!record->event.pressed) {
+        if (layer != layer_switch_get_layer(record->event.key)) {
+            // we removed the top layer, but the released key doesn't exist on this layer
+            // out of order release; flip the layers
+            layer_invert(layer1);
+            layer_invert(layer2);
+        }
     }
 }
 
@@ -485,9 +484,9 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
         case SPECIAL_KEY:
             return action_special_key(record, opt);
         case TOGGLE_SHIFT:
-            return action_shiftswitch(record, opt);
+            return action_toggle_shift(record, opt);
         case FKEY_SWITCH:
-            return action_fkey(record);
+            return action_two_layer_switch(LAYER_NUMPAD, LAYER_BLUESHIFT, LAYER_FKEYS, record);
         default:
             print("Unknown action_function called\n");
             print("id  = "); phex(id); print("\n");

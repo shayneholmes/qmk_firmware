@@ -12,11 +12,37 @@
 
 /* id for user defined functions */
 enum function_id {
-    ANY_KEY,
+    SPECIAL_KEY,
     PLOVER_SWITCH,
-    SHIFT_SWITCH,
+    TOGGLE_SHIFT,
     FKEY_SWITCH,
     UNUSED,
+};
+
+enum special_keys {
+    // Keys that act differently depending on which mods are pressed
+    // Since these are used as 4-bit function options, only sixteen fit
+    APOSTROPHE_CMD_TICK,
+    ESCAPE_CMD_TICK,
+    MEDIA_FORWARD_BACK,
+};
+
+enum toggle_shift_keys {
+    // Keys with inverted toggles
+    // Since these are used as 4-bit function options, only sixteen fit
+    SHIFT_1,
+    SHIFT_2,
+    SHIFT_3,
+    SHIFT_4,
+    SHIFT_5,
+    SHIFT_6,
+    SHIFT_7,
+    SHIFT_8,
+    SHIFT_9,
+    SHIFT_0,
+    SHIFT_GRAVE,
+    SHIFT_LBRC,
+    SHIFT_RBRC
 };
 
 /*
@@ -37,8 +63,6 @@ qk_tap_dance_action_t tap_dance_actions[] = {
   [TD_SEMICOLON_COLON] = ACTION_TAP_DANCE_DOUBLE(KC_SCLN, KC_COLON)
 };
 
-#define _______ KC_TRNS
-#define XXXXXXX KC_NO
 #define LAYER_BASE 0
 #define LAYER_PLOVER 4
 #define LAYER_NUMPAD 5
@@ -48,9 +72,27 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 
 #define FOPT(FN,OPT) FUNC((ACTION_FUNCTION_OPT(FN, OPT) & 0xFFF))
 
-#define ANYKEY FOPT(ANY_KEY, CURRENT_LAYER)
+#define SPECIALKEY(key) FOPT(SPECIAL_KEY, key)
+#define SP_APCD SPECIALKEY(APOSTROPHE_CMD_TICK)
+#define SP_ESCD SPECIALKEY(ESCAPE_CMD_TICK)
+#define SP_MDFB SPECIALKEY(MEDIA_FORWARD_BACK)
+
+#define TOGGLE_SHIFT(key) FOPT(TOGGLE_SHIFT,key)
+#define TSFT_1 TOGGLE_SHIFT(SHIFT_1)
+#define TSFT_2 TOGGLE_SHIFT(SHIFT_2)
+#define TSFT_3 TOGGLE_SHIFT(SHIFT_3)
+#define TSFT_4 TOGGLE_SHIFT(SHIFT_4)
+#define TSFT_5 TOGGLE_SHIFT(SHIFT_5)
+#define TSFT_6 TOGGLE_SHIFT(SHIFT_6)
+#define TSFT_7 TOGGLE_SHIFT(SHIFT_7)
+#define TSFT_8 TOGGLE_SHIFT(SHIFT_8)
+#define TSFT_9 TOGGLE_SHIFT(SHIFT_9)
+#define TSFT_0 TOGGLE_SHIFT(SHIFT_0)
+#define TSFT_G TOGGLE_SHIFT(SHIFT_GRAVE)
+#define TSFT_L TOGGLE_SHIFT(SHIFT_LBRC)
+#define TSFT_R TOGGLE_SHIFT(SHIFT_RBRC)
+
 #define PLOVER F(PLOVER_SWITCH)
-#define SHIFTED F(SHIFT_SWITCH)
 #define FN_KEYS F(FKEY_SWITCH)
 
 #define TO_BASE TO(LAYER_BASE)
@@ -60,6 +102,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 #define PASSWD1 M(PASSWORD1)
 #define PASSWD2 M(PASSWORD2)
 #define PASSWD3 M(PASSWORD3)
+#define ALTTAB LGUI(KC_TAB)
 
 #define SCRNSVR LSFT(LCTL(LALT(DV_R)))
 
@@ -89,11 +132,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // BASE LAYERS
 
     #define CURRENT_LAYER LAYER_BASE
-    #define ALTTAB LGUI(KC_TAB)
     [LAYER_BASE] = KEYMAP(  // customized qwerty with symbol row switched
         // left hand
-        ANYKEY, SHIFTED,SHIFTED,SHIFTED,SHIFTED,SHIFTED,KC_F17,
-        KC_TAB, ANYKEY, KC_W,   KC_E,   KC_R,   KC_T,   LT_MOVE,
+        SP_ESCD,TSFT_1, TSFT_2, TSFT_3, TSFT_4, TSFT_5, KC_F17,
+        KC_TAB, SP_APCD,KC_W,   KC_E,   KC_R,   KC_T,   LT_MOVE,
         KC_LSFT,KC_A,   KC_S,   KC_D,   KC_F,   KC_G,
         KC_LCTL,KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   KC_DEL,
         TT_NUM, TT_BLUE,KC_LCTL,KC_LALT,KC_LGUI,
@@ -101,8 +143,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                         KC_F16,
                                        KC_BSPC,KC_LSFT,KC_LGUI,
         // right hand
-                KC_F18, SHIFTED,SHIFTED,SHIFTED,SHIFTED,SHIFTED,KC_MPLY,
-                TT_NUM, KC_Y,   KC_U,   KC_I,   KC_O,   KC_P,   ANYKEY,
+                KC_F18, TSFT_6, TSFT_7, TSFT_8, TSFT_9, TSFT_0, KC_MPLY,
+                TT_NUM, KC_Y,   KC_U,   KC_I,   KC_O,   KC_P,   SP_MDFB,
                         KC_H,   KC_J,   KC_K,   KC_L,   KC_SCLN,KC_RSFT,
                 KC_DEL, KC_N,   KC_M,   KC_COMM,KC_DOT, KC_SLSH,KC_RCTL,
                                 KC_RGUI,KC_RALT,KC_RCTL,ALTTAB, LT_MOVE,
@@ -250,7 +292,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [LAYER_BLUESHIFT] = KEYMAP(  // "BlueShift"
         // left hand
         TO_BASE,KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,
-        _______,SHIFTED,SHIFTED,SHIFTED,KC_PSCR,KC_BSLS,_______,  // the SHIFTED entries are for tilde and inverted brace/bracket keys
+        _______,TSFT_G, TSFT_L, TSFT_R, KC_PSCR,KC_BSLS,_______,
         _______,KC_APP, KC_TAB, DV_EQL, DV_MINS,KC_INS,
         _______,_______,_______,_______,KC_CAPS,_______,_______,
         FN_KEYS,_______,_______,_______,_______,
@@ -332,80 +374,69 @@ void action_plover_key(keyrecord_t *record) {
     }
 }
 
-uint16_t key_depending_on_mods(keyrecord_t *record, uint8_t default_key, uint8_t modified_key, uint8_t dependent_mods) {
-    static bool mod_pressed;
+bool are_mods_pressed(uint8_t mods, keyrecord_t *record) {
+    // save mod state that will persist until the unpress
+    static bool mods_pressed;
     if (record->event.pressed) {
-        // save mod state that will persist until the unpress
-        mod_pressed = (get_mods() & dependent_mods);
+        mods_pressed = (get_mods() & mods);
     }
-    return ACTION_MODS_KEY(0, mod_pressed ? modified_key : default_key);
+    return mods_pressed;
 }
 
-uint16_t get_any_key_action(keyrecord_t *record, uint8_t layer) {
-    uint8_t col = record->event.key.col;
-    uint8_t row = record->event.key.row;
-
-    switch (layer) {
-        case LAYER_BASE:
-            if (col == 1 && row == 1) { // apostrophe / CMD+`
-                return key_depending_on_mods(record, DV_QUOT, KC_GRV, MOD_BIT(KC_LGUI) | MOD_BIT(KC_RGUI));
-            } else if (col == 1 && row == 13) { // media forward/back
-                return key_depending_on_mods(record, KC_MEDIA_NEXT_TRACK, KC_MEDIA_PREV_TRACK, MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT));
-            } else if (col == 0 && row == 0) { // ESC / CMD+`
-                return key_depending_on_mods(record, KC_ESC, KC_GRV, MOD_BIT(KC_LGUI) | MOD_BIT(KC_RGUI));
-            }
-            break;
+uint16_t action_special_key_get_keycode(keyrecord_t *record, uint8_t opt) {
+    switch (opt) {
+        case APOSTROPHE_CMD_TICK:
+            return are_mods_pressed(MOD_BIT(KC_LGUI) | MOD_BIT(KC_RGUI), record)
+                ? KC_GRV: DV_QUOT;
+        case ESCAPE_CMD_TICK:
+            return are_mods_pressed(MOD_BIT(KC_LGUI) | MOD_BIT(KC_RGUI), record)
+                ? KC_GRV: KC_ESC;
+        case MEDIA_FORWARD_BACK:
+            return are_mods_pressed(MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT), record)
+                ? KC_MEDIA_PREV_TRACK: KC_MEDIA_NEXT_TRACK;
         default:
             break;
     }
     if (!record->event.pressed) {
-        print("Unknown anykey press:\n");
-        print("col = "); pdec(col); print("\n");
-        print("row = "); pdec(row); print("\n");
-    }
-    return ACTION_NO;
-}
-
-void action_any_key(keyrecord_t *record, uint8_t layer) {
-    action_t action;
-    action.code = get_any_key_action(record, layer);
-    if (action.code != ACTION_NO) {
-        process_action(record, action);
-    }
-}
-
-uint8_t get_shiftswitch_key(keyrecord_t *record) {
-    uint8_t col = record->event.key.col;
-    uint8_t row = record->event.key.row;
-
-    if (col == 0) { // Number row
-        switch (row) {
-            case 1:  return KC_1;
-            case 2:  return KC_2;
-            case 3:  return KC_3;
-            case 4:  return KC_4;
-            case 5:  return KC_5;
-            case 8:  return KC_6;
-            case 9:  return KC_7;
-            case 10: return KC_8;
-            case 11: return KC_9;
-            case 12: return KC_0;
-        }
-    }
-    else if (col == 1) { // next row
-        switch (row) {
-            case 1: return DV_GRV;
-            case 2: return DV_LBRC;
-            case 3: return DV_RBRC;
-        }
+        print("Unknown special key press option: "); pdec(opt); print("\n");
     }
     return KC_NO;
 }
 
-void action_shiftswitch(keyrecord_t *record) {
+void action_special_key(keyrecord_t *record, uint8_t opt) {
+    action_t action;
+    uint16_t keycode = action_special_key_get_keycode(record, opt);
+    if (keycode != KC_NO) {
+        action.code = ACTION_MODS_KEY(0, keycode);
+        process_action(record, action);
+    }
+}
+
+inline uint8_t action_shiftswitch_get_keycode(uint8_t opt) {
+    // Unpack the 4-bit option into to an 8-bit keycode
+    switch(opt) {
+        case SHIFT_1: return KC_1;
+        case SHIFT_2: return KC_2;
+        case SHIFT_3: return KC_3;
+        case SHIFT_4: return KC_4;
+        case SHIFT_5: return KC_5;
+        case SHIFT_6: return KC_6;
+        case SHIFT_7: return KC_7;
+        case SHIFT_8: return KC_8;
+        case SHIFT_9: return KC_9;
+        case SHIFT_0: return KC_0;
+        case SHIFT_GRAVE: return DV_GRV;
+        case SHIFT_LBRC: return DV_LBRC;
+        case SHIFT_RBRC: return DV_RBRC;
+        default: return KC_NO;
+    }
+};
+
+void action_shiftswitch(keyrecord_t *record, uint8_t opt) {
     if (!record->event.pressed) return; // tap these keys when they're pressed
 
-    uint8_t keycode = get_shiftswitch_key(record);
+    uint8_t keycode = action_shiftswitch_get_keycode(opt);
+
     if (keycode == KC_NO) return;
 
     uint8_t savedmods = get_mods();
@@ -451,10 +482,10 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
     switch (id) {
         case PLOVER_SWITCH:
             return action_plover_key(record);
-        case ANY_KEY:
-            return action_any_key(record, opt);
-        case SHIFT_SWITCH:
-            return action_shiftswitch(record);
+        case SPECIAL_KEY:
+            return action_special_key(record, opt);
+        case TOGGLE_SHIFT:
+            return action_shiftswitch(record, opt);
         case FKEY_SWITCH:
             return action_fkey(record);
         default:

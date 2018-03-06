@@ -11,6 +11,7 @@
 #endif
 
 /* id for user defined functions */
+/* my packing scheme limits this to 16 */
 enum function_id {
     SPECIAL_KEY,
     PLOVER_SWITCH,
@@ -21,28 +22,10 @@ enum function_id {
 
 enum special_keys {
     // Keys that act differently depending on which mods are pressed
-    // Since these are used as 4-bit function options, only sixteen fit
+    // My packing scheme limits the size of this to 128
     APOSTROPHE_CMD_TICK,
     ESCAPE_CMD_TICK,
     MEDIA_FORWARD_BACK,
-};
-
-enum toggle_shift_keys {
-    // Keys with inverted toggles
-    // Since these are used as 4-bit function options, only sixteen fit
-    SHIFT_1,
-    SHIFT_2,
-    SHIFT_3,
-    SHIFT_4,
-    SHIFT_5,
-    SHIFT_6,
-    SHIFT_7,
-    SHIFT_8,
-    SHIFT_9,
-    SHIFT_0,
-    SHIFT_GRAVE,
-    SHIFT_LBRC,
-    SHIFT_RBRC
 };
 
 /*
@@ -70,7 +53,10 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 #define LAYER_BLUESHIFT 7
 #define LAYER_FKEYS 8
 
-#define FOPT(FN,OPT) FUNC((ACTION_FUNCTION_OPT(FN, OPT) & 0xFFF))
+/* pack a 4-bit id, a 7-bit opt and a tap bit into twelve bits */
+#define PACK_FN(id,opt,tap) FUNC((tap ? FUNC_TAP<<8 : 0) | ((opt)&0x7F)<<4 | (id))
+#define FOPT_TAP(fn,opt) PACK_FN(fn,opt,1)
+#define FOPT(fn,opt) PACK_FN(fn,opt,0)
 
 #define SPECIALKEY(key) FOPT(SPECIAL_KEY, key)
 #define SP_APCD SPECIALKEY(APOSTROPHE_CMD_TICK)
@@ -78,23 +64,23 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 #define SP_MDFB SPECIALKEY(MEDIA_FORWARD_BACK)
 
 #define TOGGLE_SHIFT(key) FOPT(TOGGLE_SHIFT,key)
-#define TSFT_1 TOGGLE_SHIFT(SHIFT_1)
-#define TSFT_2 TOGGLE_SHIFT(SHIFT_2)
-#define TSFT_3 TOGGLE_SHIFT(SHIFT_3)
-#define TSFT_4 TOGGLE_SHIFT(SHIFT_4)
-#define TSFT_5 TOGGLE_SHIFT(SHIFT_5)
-#define TSFT_6 TOGGLE_SHIFT(SHIFT_6)
-#define TSFT_7 TOGGLE_SHIFT(SHIFT_7)
-#define TSFT_8 TOGGLE_SHIFT(SHIFT_8)
-#define TSFT_9 TOGGLE_SHIFT(SHIFT_9)
-#define TSFT_0 TOGGLE_SHIFT(SHIFT_0)
-#define TSFT_G TOGGLE_SHIFT(SHIFT_GRAVE)
-#define TSFT_L TOGGLE_SHIFT(SHIFT_LBRC)
-#define TSFT_R TOGGLE_SHIFT(SHIFT_RBRC)
+#define TSFT_1 TOGGLE_SHIFT(KC_1)
+#define TSFT_2 TOGGLE_SHIFT(KC_2)
+#define TSFT_3 TOGGLE_SHIFT(KC_3)
+#define TSFT_4 TOGGLE_SHIFT(KC_4)
+#define TSFT_5 TOGGLE_SHIFT(KC_5)
+#define TSFT_6 TOGGLE_SHIFT(KC_6)
+#define TSFT_7 TOGGLE_SHIFT(KC_7)
+#define TSFT_8 TOGGLE_SHIFT(KC_8)
+#define TSFT_9 TOGGLE_SHIFT(KC_9)
+#define TSFT_0 TOGGLE_SHIFT(KC_0)
+#define TSFT_G TOGGLE_SHIFT(DV_GRV)
+#define TSFT_L TOGGLE_SHIFT(DV_LBRC)
+#define TSFT_R TOGGLE_SHIFT(DV_RBRC)
 
 #define PLOVER F(PLOVER_SWITCH)
-#define NUM_FN FOPT(TWO_KEY_FUNCTION_LAYER, LAYER_NUMPAD)
-#define BLU_FN FOPT(TWO_KEY_FUNCTION_LAYER, LAYER_BLUESHIFT)
+#define NUM_FN FOPT_TAP(TWO_KEY_FUNCTION_LAYER, LAYER_NUMPAD)
+#define BLU_FN FOPT_TAP(TWO_KEY_FUNCTION_LAYER, LAYER_BLUESHIFT)
 
 #define TO_BASE TO(LAYER_BASE)
 #define TT_BLUE TT(LAYER_BLUESHIFT)
@@ -330,14 +316,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 };
 
-/*
- * Fn action definition (limited to 32)
- *
- * Unused; everything is defined inline in the keymap.
- */
-const uint16_t PROGMEM fn_actions[] = {
-};
-
 void action_plover_key(keyrecord_t *record) {
     if (record->event.pressed) return;
 
@@ -407,29 +385,8 @@ void action_special_key(keyrecord_t *record, uint8_t opt) {
     }
 }
 
-inline uint8_t action_toggle_shift_get_keycode(uint8_t opt) {
-    // Unpack the 4-bit option into to an 8-bit keycode
-    switch(opt) {
-        case SHIFT_1: return KC_1;
-        case SHIFT_2: return KC_2;
-        case SHIFT_3: return KC_3;
-        case SHIFT_4: return KC_4;
-        case SHIFT_5: return KC_5;
-        case SHIFT_6: return KC_6;
-        case SHIFT_7: return KC_7;
-        case SHIFT_8: return KC_8;
-        case SHIFT_9: return KC_9;
-        case SHIFT_0: return KC_0;
-        case SHIFT_GRAVE: return DV_GRV;
-        case SHIFT_LBRC: return DV_LBRC;
-        case SHIFT_RBRC: return DV_RBRC;
-        default: return KC_NO;
-    }
-};
-
-void action_toggle_shift(keyrecord_t *record, uint8_t opt) {
+void action_toggle_shift(keyrecord_t *record, uint8_t keycode) {
     if (!record->event.pressed) return; // tap these keys only when they're pressed
-    uint8_t keycode = action_toggle_shift_get_keycode(opt);
     if (keycode == KC_NO) return;
     uint8_t savedmods = get_mods();
     action_t action = {.code = ACTION_MODS_KEY(savedmods ? 0 : MOD_LSFT, keycode)};
@@ -464,8 +421,10 @@ void action_two_layer_switch(uint8_t cumulative_layer, keyrecord_t *record, uint
     }
 }
 
-void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
+void action_function(keyrecord_t *record, uint8_t packed_id, uint8_t packed_opt)
 {
+    uint8_t id = packed_id & 0xF;
+    uint8_t opt = packed_id>>4 | (packed_opt&0x7)<<4;
     switch (id) {
         case PLOVER_SWITCH:
             return action_plover_key(record);
@@ -542,20 +501,14 @@ void matrix_scan_user(void)
     }
 }
 
+uint16_t keymap_function_id_to_action( uint16_t packed )
+{
+    /* instead of referring to fn_actions, compute the action directly */
+    return ACTION_FUNCTION(packed);
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record)
 {
-    action_t action;
-    switch (keycode) {
-        case QK_FUNCTION ... QK_FUNCTION_MAX:
-            // I've overloaded these to just have function IDs and opts
-            // in them, like ACTION_FUNCTION. Instead of referencing into
-            // fn_actions[], just call it directly.
-            action.code = keycode & 0xFFF;
-            action_function(record, action.func.id, action.func.opt);
-            return false;
-        default:
-            break;
-    }
     return true;
 }
 

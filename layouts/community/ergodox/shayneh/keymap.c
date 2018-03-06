@@ -15,7 +15,7 @@ enum function_id {
     SPECIAL_KEY,
     PLOVER_SWITCH,
     TOGGLE_SHIFT,
-    TWO_LAYER_SWITCH,
+    TWO_KEY_FUNCTION_LAYER,
     UNUSED,
 };
 
@@ -93,7 +93,8 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 #define TSFT_R TOGGLE_SHIFT(SHIFT_RBRC)
 
 #define PLOVER F(PLOVER_SWITCH)
-#define FN_KEYS FOPT(TWO_LAYER_SWITCH, LAYER_FKEYS)
+#define NUM_FN FOPT(TWO_KEY_FUNCTION_LAYER, LAYER_NUMPAD)
+#define BLU_FN FOPT(TWO_KEY_FUNCTION_LAYER, LAYER_BLUESHIFT)
 
 #define TO_BASE TO(LAYER_BASE)
 #define TT_BLUE TT(LAYER_BLUESHIFT)
@@ -137,7 +138,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB, SP_APCD,KC_W,   KC_E,   KC_R,   KC_T,   LT_MOVE,
         KC_LSFT,KC_A,   KC_S,   KC_D,   KC_F,   KC_G,
         KC_LCTL,KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   KC_DEL,
-        TT_NUM, TT_BLUE,KC_LCTL,KC_LALT,KC_LGUI,
+        NUM_FN, BLU_FN, KC_LCTL,KC_LALT,KC_LGUI,
                                                 PLOVER, KC_LEAD,
                                                         KC_F16,
                                        KC_BSPC,KC_LSFT,KC_LGUI,
@@ -179,7 +180,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB, KC_QUOT,KC_COMM,KC_DOT, KC_P,   KC_Y,   LT_MOVE,
         KC_LSFT,KC_A,   KC_O,   KC_E,   KC_U,   KC_I,
         KC_LCTL,KC_SCLN,KC_Q,   KC_J,   KC_K,   KC_X,   KC_DEL,
-        TT_NUM, TT_BLUE,KC_LCTL,KC_LALT,KC_LGUI,
+        NUM_FN, BLU_FN, KC_LCTL,KC_LALT,KC_LGUI,
                                                 PLOVER, KC_HOME,
                                                         KC_END,
                                         KC_BSPC,KC_LSFT,KC_LGUI,
@@ -249,7 +250,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,XXXXXXX,KC_WH_U,KC_MS_U,KC_WH_D,KC_BTN2,_______,
         _______,XXXXXXX,KC_MS_L,KC_MS_D,KC_MS_R,KC_BTN1,
         _______,NUM_CLN,XXXXXXX,XXXXXXX,XXXXXXX,KC_BTN3,_______,
-        _______,FN_KEYS,_______,_______,_______,
+        _______,_______,_______,_______,_______,
                                                 _______,_______,
                                                         _______,
                                         _______,_______,_______,
@@ -290,7 +291,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,TSFT_G, TSFT_L, TSFT_R, KC_PSCR,KC_BSLS,_______,
         _______,KC_APP, KC_TAB, DV_EQL, DV_MINS,KC_INS,
         _______,_______,_______,_______,KC_CAPS,_______,_______,
-        FN_KEYS,_______,_______,_______,_______,
+        _______,_______,_______,_______,_______,
                                                 _______,_______,
                                                         _______,
                                         _______,_______,_______,
@@ -313,7 +314,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,KC_F13, KC_F14, KC_F15, KC_F16, XXXXXXX,_______,
         _______,KC_F17, KC_F18, KC_F19, KC_F20, XXXXXXX,
         _______,KC_F21, KC_F22, KC_F23, KC_F24, XXXXXXX,_______,
-        FN_KEYS,FN_KEYS,_______,KC_LALT,KC_LGUI,
+        _______,_______,_______,KC_LALT,KC_LGUI,
                                                 _______,_______,
                                                         _______,
                                         KC_LCTL,KC_LSFT,_______,
@@ -447,27 +448,19 @@ void action_toggle_shift(keyrecord_t *record, uint8_t opt) {
     }
 }
 
-/* Coordinate switching to target_layer with two buttons, one of each pointing to layer1 and layer2 */
-void action_two_layer_switch(keyrecord_t *record, uint8_t target_layer) {
-    static uint8_t layer1;
-    static keypos_t key1;
-    if (record->event.pressed) {
-        // save how we got here for later reference
-        key1 = record->event.key;
-        layer1 = layer_switch_get_layer(key1);
-    }
-    layer_invert(target_layer);
-    if (!record->event.pressed) {
-        uint8_t layer = layer_switch_get_layer(record->event.key);
-        if (layer != layer1) {
-            // we removed the top layer, but the released key doesn't exist on this layer
-            // out of order release; flip the layers
-            uint16_t keycode = keymap_key_to_keycode(layer, key1);
-            uint8_t layer2 = keycode & 0xFF; // assume this is a layer macro
-
-            layer_invert(layer1);
-            layer_invert(layer2);
+/* Coordinate switching to cumulative_layer with two buttons, each pointing to a different intermediate_layer */
+void action_two_layer_switch(uint8_t cumulative_layer, keyrecord_t *record, uint8_t intermediate_layer) {
+    static bool one_active = false;
+    bool was_on = IS_LAYER_ON(intermediate_layer);
+    action_t action_intermediate = { .code = ACTION_LAYER_TAP_TOGGLE(intermediate_layer) };
+    process_action(record, action_intermediate);
+    bool transitioned = was_on != (bool) IS_LAYER_ON(intermediate_layer);
+    if (transitioned) {
+        if (one_active != was_on) { // xor
+            action_t action_cumulative = { .code = ACTION_LAYER_TAP_TOGGLE(cumulative_layer) };
+            process_action(record, action_cumulative);
         }
+        one_active = !one_active;
     }
 }
 
@@ -480,8 +473,8 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
             return action_special_key(record, opt);
         case TOGGLE_SHIFT:
             return action_toggle_shift(record, opt);
-        case TWO_LAYER_SWITCH:
-            return action_two_layer_switch(record, opt);
+        case TWO_KEY_FUNCTION_LAYER:
+            return action_two_layer_switch(LAYER_FKEYS, record, opt);
         default:
             print("Unknown action_function called\n");
             print("id  = "); phex(id); print("\n");

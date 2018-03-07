@@ -325,8 +325,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 void function_plover_key(keyrecord_t *record)
 {
     if (record->event.pressed) return;
-    bool turning_on = !(layer_state & 1<<LAYER_PLOVER);
     layer_invert(LAYER_PLOVER);
+    bool turning_on = IS_LAYER_ON(LAYER_PLOVER);
     if (turning_on) {
         // PHROPB
         action_macro_play(MACRO(

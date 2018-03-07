@@ -37,15 +37,6 @@ enum macro_id {
     PASSWORD3,
 };
 
-// Tap Dance Definitions
-enum tap_dance_custom_keys {
-  TD_SEMICOLON_COLON,
-};
-
-qk_tap_dance_action_t tap_dance_actions[] = {
-  [TD_SEMICOLON_COLON] = ACTION_TAP_DANCE_DOUBLE(KC_SCLN, KC_COLON)
-};
-
 #define LAYER_BASE 0
 #define LAYER_PLOVER 4
 #define LAYER_NUMPAD 5

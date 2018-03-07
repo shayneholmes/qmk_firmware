@@ -16,7 +16,7 @@
 
 * Plover layer, including emitting chords to enable Plover when the layer is triggered
 
-* Password macros - I, too, have ignored Jack's warnings and accept my fate. At least the passwords.h file is ignored by git so the passwords aren't stored here.
+* Private macros - the macro.h file is ignored by git so your macros won't be stored in the repo. (There's a fallback example macro.h to show you the ropes.)
 
 ## Layers
 

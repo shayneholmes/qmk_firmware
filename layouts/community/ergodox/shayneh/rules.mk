@@ -16,9 +16,9 @@ SLEEP_LED_ENABLE := no       # Breathing sleep LED during USB suspend
 UNICODEMAP_ENABLE := no
 UNICODE_ENABLE := no
 
-ifneq ("$(wildcard $(LAYOUT_KEYMAP_PATH)/passwords.h)","")
-$(info "Found a customized password file.")
-OPT_DEFS+=-DSHAYNEH_PASSWORDS_H
+ifneq ("$(wildcard $(LAYOUT_KEYMAP_PATH)/macro.h)","")
+$(info "Found a customized macro file.")
+OPT_DEFS+=-DSHAYNEH_MACROS_H
 else
-$(info "No customized password file found; falling back to example file.")
+$(info "No customized macro file found; falling back to example file.")
 endif

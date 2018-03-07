@@ -4,10 +4,10 @@
 
 #include "sendstring_dvorak.h"
 
-#ifdef SHAYNEH_PASSWORDS_H
-#include "passwords.h"
+#ifdef SHAYNEH_MACROS_H
+#include "macro.h"
 #else
-#include "passwords_example.h"
+#include "macro_example.h"
 #endif
 
 /* id for user defined functions */
@@ -26,9 +26,9 @@ enum function_id {
 enum function_parameters {
     PLOVER_SWITCH,
     // macro ids
-    PASSWORD1,
-    PASSWORD2,
-    PASSWORD3,
+    MACRO_Q,
+    MACRO_P,
+    MACRO_K,
     // special keys
     APOSTROPHE_CMD_TICK,
     ESCAPE_CMD_TICK,
@@ -55,9 +55,9 @@ enum named_layers {
 #define PLOVER FUNCTION(PLOVER_SWITCH)
 
 #define SENDMACRO(fn) FPARAM(SEND_MACRO, fn)
-#define PASSWD1 SENDMACRO(PASSWORD1)
-#define PASSWD2 SENDMACRO(PASSWORD2)
-#define PASSWD3 SENDMACRO(PASSWORD3)
+#define MACROQ SENDMACRO(MACRO_Q)
+#define MACROP SENDMACRO(MACRO_P)
+#define MACROK SENDMACRO(MACRO_K)
 
 #define SPECIALKEY(key) FPARAM(SPECIAL_KEY, key)
 #define SP_APCD SPECIALKEY(APOSTROPHE_CMD_TICK)
@@ -255,7 +255,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         RESET,  XXXXXXX,KC_PGUP,KC_UP,  KC_PGDN,XXXXXXX,_______,
         _______,KC_HOME,KC_LEFT,KC_DOWN,KC_RGHT,KC_END,
         _______,XXXXXXX,XXXXXXX,KC_END, KC_HOME,XXXXXXX,_______,
-        _______,_______,_______,PASSWD1,PASSWD2,
+        _______,_______,_______,MACROQ, MACROP,
                                                 _______,_______,
                                                         _______,
                                         KC_LCTL,KC_LSFT,_______,
@@ -425,9 +425,9 @@ void function_send_macro(keyrecord_t *record, uint8_t param)
 {
     if (!record->event.pressed) return;
     switch (param) {
-        case PASSWORD1: MACRO_PASSWORD1;
-        case PASSWORD2: MACRO_PASSWORD2;
-        case PASSWORD3: MACRO_PASSWORD3;
+        case MACRO_Q: MACRO_DEF_Q;
+        case MACRO_P: MACRO_DEF_P;
+        case MACRO_K: MACRO_DEF_K;
         default:
             print("Unknown macro called\n");
             print("param  = "); phex(param); print("\n");
@@ -495,13 +495,13 @@ void matrix_scan_user(void)
         leader_end();
 
         SEQ_ONE_KEY(DV_Q) {
-            MACRO_PASSWORD1;
+            MACRO_DEF_Q;
         }
         SEQ_ONE_KEY(DV_L) {
-            MACRO_PASSWORD2;
+            MACRO_DEF_P;
         }
         SEQ_ONE_KEY(DV_K) {
-            MACRO_PASSWORD3;
+            MACRO_DEF_K;
         }
     }
 }

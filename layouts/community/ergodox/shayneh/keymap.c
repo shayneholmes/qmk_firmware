@@ -313,7 +313,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 };
 
-void action_plover_key(keyrecord_t *record)
+void function_plover_key(keyrecord_t *record)
 {
     if (record->event.pressed) return;
     bool turning_on = !(layer_state & 1<<LAYER_PLOVER);
@@ -347,7 +347,7 @@ bool are_mods_pressed(uint8_t mods, keyrecord_t *record)
     return mods_pressed;
 }
 
-uint16_t action_special_key_get_keycode(keyrecord_t *record, uint8_t opt)
+uint16_t function_special_key_get_keycode(keyrecord_t *record, uint8_t opt)
 {
     switch (opt) {
         case APOSTROPHE_CMD_TICK:
@@ -368,17 +368,17 @@ uint16_t action_special_key_get_keycode(keyrecord_t *record, uint8_t opt)
     return KC_NO;
 }
 
-void action_special_key(keyrecord_t *record, uint8_t opt)
+void function_special_key(keyrecord_t *record, uint8_t opt)
 {
     action_t action;
-    uint16_t keycode = action_special_key_get_keycode(record, opt);
+    uint16_t keycode = function_special_key_get_keycode(record, opt);
     if (keycode != KC_NO) {
         action.code = ACTION_MODS_KEY(0, keycode);
         process_action(record, action);
     }
 }
 
-void action_toggle_shift(keyrecord_t *record, uint8_t keycode)
+void function_toggle_shift(keyrecord_t *record, uint8_t keycode)
 {
     if (!record->event.pressed) return; // tap these keys only when they're pressed
     if (keycode == KC_NO) return;
@@ -401,7 +401,7 @@ void action_toggle_shift(keyrecord_t *record, uint8_t keycode)
 
 /* Coordinate switching to cumulative_layer with two buttons, each pointing to a different intermediate_layer */
 /* Both layers must be <= 15 */
-void action_two_layer_switch(keyrecord_t *record, uint8_t opt)
+void function_two_layer_switch(keyrecord_t *record, uint8_t opt)
 {
     uint8_t intermediate_layer = opt >> 4;
     uint8_t cumulative_layer = opt & 0xF;
@@ -427,7 +427,7 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
     switch (opt) {
         case FUNCTION_NULLARY:
             switch(id) {
-                case PLOVER_SWITCH: return action_plover_key(record);
+                case PLOVER_SWITCH: return function_plover_key(record);
                 case PASSWORD1: MACRO_PASSWORD1;
                 case PASSWORD2: MACRO_PASSWORD2;
                 case PASSWORD3: MACRO_PASSWORD3;
@@ -437,11 +437,11 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
                     return;
             }
         case SPECIAL_KEY:
-            return action_special_key(record, id);
+            return function_special_key(record, id);
         case TOGGLE_SHIFT:
-            return action_toggle_shift(record, id);
+            return function_toggle_shift(record, id);
         case TWO_KEY_FUNCTION_LAYER:
-            return action_two_layer_switch(record, id);
+            return function_two_layer_switch(record, id);
         default:
             print("Unknown action_function called\n");
             print("id  = "); phex(id); print("\n");

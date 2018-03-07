@@ -5,17 +5,11 @@
 
 #define SEND_STRING_DELAY(str) send_string_with_delay_P(PSTR(str), 15)
 
-#define MACRO_PASSWORD1     SEND_STRING_DELAY("Example!\n"); return false
+#define MACRO_PASSWORD1     SEND_STRING_DELAY("Example!\n"); return
 
-#define MACRO_PASSWORD2     SEND_STRING_DELAY("Another example... "); return false
+#define MACRO_PASSWORD2     SEND_STRING_DELAY("Another example... "); return
 
-#define MACRO_PASSWORD3     return MACRO( \
-                                I(15), \
-                                D(LCTL), D(LALT), T(F2), W(255), U(LALT), U(LCTL), W(255), \
-                                T(X), T(M), T(O), T(N), T(UP), T(ENT), W(255), \
-                                D(LCTL), D(LALT), T(F5), W(255), U(LALT), U(LCTL), W(255), \
-                            END) \
-
+#define MACRO_PASSWORD3     SEND_STRING_DELAY("And a third"); return
 /*
 These VIM commands make this easier to generate
 -- Dvorak decipher (for a QWERTY layout on a machine with software Dvorak set):

@@ -11,7 +11,7 @@
 #endif
 
 /* id for user defined functions */
-/* using the opt field for these limits this list to length 8 */
+/* using the 3-bit opt field here limits this list to length 8 */
 /* the id field specifies an 8-bit parameter unless otherwise specified */
 enum function_id {
     FUNCTION_NULLARY, // for functions with no parameters; use id to specify
@@ -25,23 +25,17 @@ enum function_id {
 /* limited to 256 */
 enum functions_nullary {
     PLOVER_SWITCH,
-};
-
-enum special_keys {
-    // Keys that act differently depending on which mods are pressed
-    // My packing scheme limits the size of this to 256
-    APOSTROPHE_CMD_TICK,
-    ESCAPE_CMD_TICK,
-    MEDIA_FORWARD_BACK,
-};
-
-/*
- * Macro definition
- */
-enum macro_id {
     PASSWORD1,
     PASSWORD2,
     PASSWORD3,
+};
+
+/* keys that act differently depending on which mods are pressed */
+/* limited to 256 */
+enum special_keys {
+    APOSTROPHE_CMD_TICK,
+    ESCAPE_CMD_TICK,
+    MEDIA_FORWARD_BACK,
 };
 
 #define LAYER_BASE 0
@@ -73,9 +67,9 @@ enum macro_id {
 #define TSFT_8 TOGGLE_SHIFT(KC_8)
 #define TSFT_9 TOGGLE_SHIFT(KC_9)
 #define TSFT_0 TOGGLE_SHIFT(KC_0)
-#define TSFT_G TOGGLE_SHIFT(DV_GRV)
-#define TSFT_L TOGGLE_SHIFT(DV_LBRC)
-#define TSFT_R TOGGLE_SHIFT(DV_RBRC)
+#define TSFT_GR TOGGLE_SHIFT(DV_GRV)
+#define TSFT_LB TOGGLE_SHIFT(DV_LBRC)
+#define TSFT_RB TOGGLE_SHIFT(DV_RBRC)
 
 #define PLOVER FUNCTION_NULLARY(PLOVER_SWITCH)
 
@@ -275,7 +269,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [LAYER_BLUESHIFT] = KEYMAP(  // "BlueShift"
         // left hand
         TO_BASE,KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,
-        _______,TSFT_G, TSFT_L, TSFT_R, KC_PSCR,KC_BSLS,_______,
+        _______,TSFT_GR,TSFT_LB,TSFT_RB,KC_PSCR,KC_BSLS,_______,
         _______,KC_APP, KC_TAB, DV_EQL, DV_MINS,KC_INS,
         _______,_______,_______,_______,KC_CAPS,_______,_______,
         _______,_______,_______,_______,_______,
@@ -317,16 +311,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 };
 
-void action_plover_key(keyrecord_t *record) {
+void action_plover_key(keyrecord_t *record)
+{
     if (record->event.pressed) return;
-
-    uint8_t savedmods = get_mods();
-    uint8_t shift_pressed = (savedmods & (MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT)));
-    if (shift_pressed) {
-        layer_off(LAYER_PLOVER); // shift+plover is a signal to AHK to restart Plover, so don't toggle the plover layer
-        return;
-    }
-
     bool turning_on = !(layer_state & 1<<LAYER_PLOVER);
     layer_invert(LAYER_PLOVER);
     if (turning_on) {
@@ -348,7 +335,8 @@ void action_plover_key(keyrecord_t *record) {
     }
 }
 
-bool are_mods_pressed(uint8_t mods, keyrecord_t *record) {
+bool are_mods_pressed(uint8_t mods, keyrecord_t *record)
+{
     // save mod state that will persist until the unpress
     static bool mods_pressed;
     if (record->event.pressed) {
@@ -357,7 +345,8 @@ bool are_mods_pressed(uint8_t mods, keyrecord_t *record) {
     return mods_pressed;
 }
 
-uint16_t action_special_key_get_keycode(keyrecord_t *record, uint8_t opt) {
+uint16_t action_special_key_get_keycode(keyrecord_t *record, uint8_t opt)
+{
     switch (opt) {
         case APOSTROPHE_CMD_TICK:
             return are_mods_pressed(MOD_BIT(KC_LGUI) | MOD_BIT(KC_RGUI), record)
@@ -377,7 +366,8 @@ uint16_t action_special_key_get_keycode(keyrecord_t *record, uint8_t opt) {
     return KC_NO;
 }
 
-void action_special_key(keyrecord_t *record, uint8_t opt) {
+void action_special_key(keyrecord_t *record, uint8_t opt)
+{
     action_t action;
     uint16_t keycode = action_special_key_get_keycode(record, opt);
     if (keycode != KC_NO) {
@@ -386,7 +376,8 @@ void action_special_key(keyrecord_t *record, uint8_t opt) {
     }
 }
 
-void action_toggle_shift(keyrecord_t *record, uint8_t keycode) {
+void action_toggle_shift(keyrecord_t *record, uint8_t keycode)
+{
     if (!record->event.pressed) return; // tap these keys only when they're pressed
     if (keycode == KC_NO) return;
     uint8_t savedmods = get_mods();
@@ -408,7 +399,8 @@ void action_toggle_shift(keyrecord_t *record, uint8_t keycode) {
 
 /* Coordinate switching to cumulative_layer with two buttons, each pointing to a different intermediate_layer */
 /* Both layers must be <= 15 */
-void action_two_layer_switch(keyrecord_t *record, uint8_t opt) {
+void action_two_layer_switch(keyrecord_t *record, uint8_t opt)
+{
     uint8_t intermediate_layer = opt >> 4;
     uint8_t cumulative_layer = opt & 0xF;
     static uint16_t one_active = 0; // bit at position L is on if a single layer in a pair leading to L is on
@@ -426,14 +418,17 @@ void action_two_layer_switch(keyrecord_t *record, uint8_t opt) {
     }
 }
 
+/* override hook */
 void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
 {
     opt &= 0x7; // ignore taps
     switch (opt) {
         case FUNCTION_NULLARY:
             switch(id) {
-                case PLOVER_SWITCH:
-                    return action_plover_key(record);
+                case PLOVER_SWITCH: return action_plover_key(record);
+                case PASSWORD1: MACRO_PASSWORD1;
+                case PASSWORD2: MACRO_PASSWORD2;
+                case PASSWORD3: MACRO_PASSWORD3;
                 default:
                     print("Unknown nullary_function called\n");
                     print("id  = "); phex(id); print("\n");
@@ -453,26 +448,7 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
     }
 }
 
-const macro_t *get_macro(uint8_t id, uint8_t opt) {
-    switch (id) {
-        case PASSWORD1: MACRO_PASSWORD1;
-        case PASSWORD2: MACRO_PASSWORD2;
-        case PASSWORD3: MACRO_PASSWORD3;
-    }
-    return MACRO_NONE;
-}
-
-const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
-{
-    if (record->event.pressed) {
-        return get_macro(id, opt);
-    }
-    return MACRO_NONE;
-}
-
-/*
- * Hooks, used here for lighting
- */
+/* override hook */
 void matrix_init_user(void)
 {
     ergodox_board_led_on();
@@ -482,6 +458,7 @@ void matrix_init_user(void)
 
 LEADER_EXTERNS();
 
+/* override hook */
 void matrix_scan_user(void)
 {
     uint8_t layer = biton32(layer_state);
@@ -501,26 +478,22 @@ void matrix_scan_user(void)
         leader_end();
 
         SEQ_ONE_KEY(DV_Q) {
-            action_macro_play(get_macro(PASSWORD1, 0));
+            MACRO_PASSWORD1;
         }
         SEQ_ONE_KEY(DV_L) {
-            action_macro_play(get_macro(PASSWORD2, 0));
+            MACRO_PASSWORD2;
         }
         SEQ_ONE_KEY(DV_K) {
-            action_macro_play(get_macro(PASSWORD3, 0));
+            MACRO_PASSWORD3;
         }
     }
 }
 
+/* override hook */
 uint16_t keymap_function_id_to_action( uint16_t packed )
 {
     /* instead of referring to fn_actions, compute the action directly */
     return ACTION_FUNCTION(packed);
-}
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record)
-{
-    return true;
 }
 
 // vim:shiftwidth=4:cindent:expandtab:tabstop=4

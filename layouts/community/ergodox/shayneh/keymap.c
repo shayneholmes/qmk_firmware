@@ -11,18 +11,25 @@
 #endif
 
 /* id for user defined functions */
-/* my packing scheme limits this to 16 */
+/* using the opt field for these limits this list to length 8 */
+/* the id field specifies an 8-bit parameter unless otherwise specified */
 enum function_id {
+    FUNCTION_NULLARY, // for functions with no parameters; use id to specify
     SPECIAL_KEY,
-    PLOVER_SWITCH,
     TOGGLE_SHIFT,
     TWO_KEY_FUNCTION_LAYER,
-    UNUSED,
+    UNUSED = 8,
+};
+
+/* functions with no parameters */
+/* limited to 256 */
+enum functions_nullary {
+    PLOVER_SWITCH,
 };
 
 enum special_keys {
     // Keys that act differently depending on which mods are pressed
-    // My packing scheme limits the size of this to 128
+    // My packing scheme limits the size of this to 256
     APOSTROPHE_CMD_TICK,
     ESCAPE_CMD_TICK,
     MEDIA_FORWARD_BACK,
@@ -44,10 +51,11 @@ enum macro_id {
 #define LAYER_BLUESHIFT 7
 #define LAYER_FKEYS 8
 
-/* pack a 4-bit id, a 7-bit opt and a tap bit into twelve bits */
-#define PACK_FN(id,opt,tap) FUNC((tap ? FUNC_TAP<<8 : 0) | ((opt)&0x7F)<<4 | (id))
-#define FOPT_TAP(fn,opt) PACK_FN(fn,opt,1)
-#define FOPT(fn,opt) PACK_FN(fn,opt,0)
+/* put 8-bit options into id field, shorter id goes in 3-bit opt */
+#define FUNCTION_OPT(id,opt,tap) ACTION_FUNCTION_OPT(opt, (tap ? FUNC_TAP : 0 | id))
+#define FOPT_TAP(fn,opt) FUNCTION_OPT(fn,opt,1)
+#define FOPT(fn,opt) FUNCTION_OPT(fn,opt,0)
+#define FUNCTION_NULLARY(id) FOPT(FUNCTION_NULLARY, id)
 
 #define SPECIALKEY(key) FOPT(SPECIAL_KEY, key)
 #define SP_APCD SPECIALKEY(APOSTROPHE_CMD_TICK)
@@ -69,7 +77,7 @@ enum macro_id {
 #define TSFT_L TOGGLE_SHIFT(DV_LBRC)
 #define TSFT_R TOGGLE_SHIFT(DV_RBRC)
 
-#define PLOVER F(PLOVER_SWITCH)
+#define PLOVER FUNCTION_NULLARY(PLOVER_SWITCH)
 #define NUM_FN FOPT_TAP(TWO_KEY_FUNCTION_LAYER, LAYER_NUMPAD)
 #define BLU_FN FOPT_TAP(TWO_KEY_FUNCTION_LAYER, LAYER_BLUESHIFT)
 
@@ -412,24 +420,46 @@ void action_two_layer_switch(uint8_t cumulative_layer, keyrecord_t *record, uint
     }
 }
 
-void action_function(keyrecord_t *record, uint8_t packed_id, uint8_t packed_opt)
+/**
+ * To get more parameters for some key functions, swap the uses of opt and id:
+ *
+ *  - id is 8 bits and therefore is useful for passing big parameters, like
+ *    keycodes and pairs of layers.
+ *  - opt is limited to 3 bits (the MSB is used by TMK for tappability), so use
+ *    it to identify which function to call.
+ *
+ * Although this seems to limit us to just eight functions, we can work around
+ * that with a special namespacing function, FUNCTION_NULLARY, which uses its
+ * 8-bit parameter to specify one of up to 256 functions to call (without
+ * parameters).
+ *
+ * This could be extended to make another namespace for e.g. sixteen functions
+ * that can take 4-bit parameters.
+ **/
+void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
 {
-    uint8_t id = packed_id & 0xF;
-    uint8_t opt = packed_id>>4 | (packed_opt&0x7)<<4;
-    switch (id) {
-        case PLOVER_SWITCH:
-            return action_plover_key(record);
+    opt &= 0x7; // ignore taps
+    switch (opt) {
+        case FUNCTION_NULLARY:
+            switch(id) {
+                case PLOVER_SWITCH:
+                    return action_plover_key(record);
+                default:
+                    print("Unknown nullary_function called\n");
+                    print("id  = "); phex(id); print("\n");
+                    return;
+            }
         case SPECIAL_KEY:
-            return action_special_key(record, opt);
+            return action_special_key(record, id);
         case TOGGLE_SHIFT:
-            return action_toggle_shift(record, opt);
+            return action_toggle_shift(record, id);
         case TWO_KEY_FUNCTION_LAYER:
-            return action_two_layer_switch(LAYER_FKEYS, record, opt);
+            return action_two_layer_switch(LAYER_FKEYS, record, id);
         default:
             print("Unknown action_function called\n");
             print("id  = "); phex(id); print("\n");
             print("opt = "); phex(opt); print("\n");
-            break;
+            return;
     }
 }
 

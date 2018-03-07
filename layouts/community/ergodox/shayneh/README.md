@@ -1,5 +1,9 @@
 # Shayne Holmes's ergodox layout
 
+## Information
+
+[Up-to-date version](https://github.com/shayneholmes/qmk_firmware/tree/shayneholmes/layouts/community/ergodox/shayneh) (with latest tweaks)
+
 ## Priorities:
 
 * Software Dvorak (so my laptop keyboard works still)

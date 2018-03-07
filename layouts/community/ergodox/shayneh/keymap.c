@@ -19,11 +19,15 @@ enum function_id {
     TOGGLE_SHIFT,
     TWO_KEY_FUNCTION_LAYER,
     SEND_MACRO,
-    UNUSED = 8,
+    LAST_FUNCTION_ID // unused; this needs to be at the end for the assert below to work
 };
+_Static_assert(LAST_FUNCTION_ID <= 8,
+    "Too many function IDs to fit in the 3-bit opt field");
 
 /* limited to 256 */
-enum function_parameters {
+/* keeping these together because there's lots of room, but could be split into groups */
+/* e.g. nullary_functions, macro_id, special_key, ... */
+enum function_parameter {
     PLOVER_SWITCH,
     // macro ids
     MACRO_Q,
@@ -33,11 +37,15 @@ enum function_parameters {
     APOSTROPHE_CMD_TICK,
     ESCAPE_CMD_TICK,
     MEDIA_FORWARD_BACK,
+    // placeholder
+    LAST_FUNCTION_PARAM
 };
+_Static_assert(LAST_FUNCTION_PARAM <= 256,
+    "Too many function parameters (max 256); consider breaking this enum up");
 
 /* TMK limits this to 32 */
 /* TWO_KEY_FUNCTION_LAYER and most actions only take 16 */
-enum named_layers {
+enum named_layer {
     LAYER_BASE = 0,
     LAYER_PLOVER = 4,
     LAYER_NUMPAD = 5,

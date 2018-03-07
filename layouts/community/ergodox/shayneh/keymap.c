@@ -18,21 +18,18 @@ enum function_id {
     SPECIAL_KEY,
     TOGGLE_SHIFT,
     TWO_KEY_FUNCTION_LAYER,
+    SEND_MACRO,
     UNUSED = 8,
 };
 
-/* functions with no parameters */
 /* limited to 256 */
-enum functions_nullary {
+enum function_parameters {
     PLOVER_SWITCH,
+    // macro ids
     PASSWORD1,
     PASSWORD2,
     PASSWORD3,
-};
-
-/* keys that act differently depending on which mods are pressed */
-/* limited to 256 */
-enum special_keys {
+    // special keys
     APOSTROPHE_CMD_TICK,
     ESCAPE_CMD_TICK,
     MEDIA_FORWARD_BACK,
@@ -420,6 +417,20 @@ void function_two_layer_switch(keyrecord_t *record, uint8_t opt)
     }
 }
 
+void function_send_macro(keyrecord_t *record, uint8_t opt)
+{
+    if (!record->event.pressed) return;
+    switch (opt) {
+        case PASSWORD1: MACRO_PASSWORD1;
+        case PASSWORD2: MACRO_PASSWORD2;
+        case PASSWORD3: MACRO_PASSWORD3;
+        default:
+            print("Unknown macro called\n");
+            print("opt  = "); phex(opt); print("\n");
+            return;
+    }
+}
+
 /* override hook */
 void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
 {
@@ -428,9 +439,6 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
         case FUNCTION_NULLARY:
             switch(id) {
                 case PLOVER_SWITCH: return function_plover_key(record);
-                case PASSWORD1: MACRO_PASSWORD1;
-                case PASSWORD2: MACRO_PASSWORD2;
-                case PASSWORD3: MACRO_PASSWORD3;
                 default:
                     print("Unknown nullary_function called\n");
                     print("id  = "); phex(id); print("\n");
@@ -442,6 +450,8 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
             return function_toggle_shift(record, id);
         case TWO_KEY_FUNCTION_LAYER:
             return function_two_layer_switch(record, id);
+        case SEND_MACRO:
+            return function_send_macro(record, id);
         default:
             print("Unknown action_function called\n");
             print("id  = "); phex(id); print("\n");

@@ -25,7 +25,7 @@ _Static_assert(LAST_FUNCTION_ID <= 8,
     "Too many function IDs to fit in the 3-bit opt field");
 
 /* limited to 256 */
-/* keeping these together because there's lots of room, but could be split into groups */
+/* lumping these together because there's lots of room, but could be split into groups */
 /* e.g. nullary_functions, macro_id, special_key, ... */
 enum function_parameter {
     PLOVER_SWITCH,

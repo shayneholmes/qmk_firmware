@@ -38,12 +38,14 @@ enum special_keys {
     MEDIA_FORWARD_BACK,
 };
 
-#define LAYER_BASE 0
-#define LAYER_PLOVER 4
-#define LAYER_NUMPAD 5
-#define LAYER_MOVEMENT 6
-#define LAYER_BLUESHIFT 7
-#define LAYER_FKEYS 8
+enum named_layers {
+    LAYER_BASE = 0,
+    LAYER_PLOVER = 4,
+    LAYER_NUMPAD = 5,
+    LAYER_MOVEMENT = 6,
+    LAYER_BLUESHIFT = 7,
+    LAYER_FKEYS = 8,
+};
 
 /* put 8-bit options into id field, shorter id goes in 3-bit opt */
 #define FUNCTION_OPT(id,opt,tap) FUNC((0xFFF & ACTION_FUNCTION_OPT(opt, ((tap ? FUNC_TAP : 0) | id))))

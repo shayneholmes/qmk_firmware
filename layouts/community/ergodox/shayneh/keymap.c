@@ -45,24 +45,24 @@ enum named_layers {
 };
 
 /* put 8-bit options into id field, shorter id goes in 3-bit opt */
-#define FUNCTION_OPT(id,opt,tap) FUNC((0xFFF & ACTION_FUNCTION_OPT(opt, ((tap ? FUNC_TAP : 0) | id))))
-#define FOPT_TAP(fn,opt) FUNCTION_OPT(fn,opt,1)
-#define FOPT(fn,opt) FUNCTION_OPT(fn,opt,0)
+#define FUNCTION_PARAMS(fn,param,tap) FUNC((0xFFF & ACTION_FUNCTION_OPT(param, ((tap ? FUNC_TAP : 0) | fn))))
+#define FPARAM_TAP(fn,param) FUNCTION_PARAMS(fn,param,1)
+#define FPARAM(fn,param) FUNCTION_PARAMS(fn,param,0)
 
-#define FUNCTION(id) FOPT(FUNCTION_NULLARY, id)
+#define FUNCTION(fn) FPARAM(FUNCTION_NULLARY, fn)
 #define PLOVER FUNCTION(PLOVER_SWITCH)
 
-#define SENDMACRO(id) FOPT(SEND_MACRO, id)
+#define SENDMACRO(fn) FPARAM(SEND_MACRO, fn)
 #define PASSWD1 SENDMACRO(PASSWORD1)
 #define PASSWD2 SENDMACRO(PASSWORD2)
 #define PASSWD3 SENDMACRO(PASSWORD3)
 
-#define SPECIALKEY(key) FOPT(SPECIAL_KEY, key)
+#define SPECIALKEY(key) FPARAM(SPECIAL_KEY, key)
 #define SP_APCD SPECIALKEY(APOSTROPHE_CMD_TICK)
 #define SP_ESCD SPECIALKEY(ESCAPE_CMD_TICK)
 #define SP_MDFB SPECIALKEY(MEDIA_FORWARD_BACK)
 
-#define TOGGLE_SHIFT(key) FOPT(TOGGLE_SHIFT,key)
+#define TOGGLE_SHIFT(key) FPARAM(TOGGLE_SHIFT,key)
 #define TSFT_1 TOGGLE_SHIFT(KC_1)
 #define TSFT_2 TOGGLE_SHIFT(KC_2)
 #define TSFT_3 TOGGLE_SHIFT(KC_3)
@@ -77,7 +77,7 @@ enum named_layers {
 #define TSFT_LB TOGGLE_SHIFT(DV_LBRC)
 #define TSFT_RB TOGGLE_SHIFT(DV_RBRC)
 
-#define TWO_LAYERS(inter, cumul) FOPT_TAP(TWO_KEY_FUNCTION_LAYER, inter<<4 | cumul)
+#define TWO_LAYERS(inter, cumul) FPARAM_TAP(TWO_KEY_FUNCTION_LAYER, inter<<4 | cumul)
 #define NUM_FN TWO_LAYERS(LAYER_NUMPAD, LAYER_FKEYS)
 #define BLU_FN TWO_LAYERS(LAYER_BLUESHIFT, LAYER_FKEYS)
 
@@ -346,9 +346,9 @@ bool are_mods_pressed(uint8_t mods, keyrecord_t *record)
     return mods_pressed;
 }
 
-uint16_t function_special_key_get_keycode(keyrecord_t *record, uint8_t opt)
+uint16_t function_special_key_get_keycode(keyrecord_t *record, uint8_t param)
 {
-    switch (opt) {
+    switch (param) {
         case APOSTROPHE_CMD_TICK:
             return are_mods_pressed(MOD_BIT(KC_LGUI) | MOD_BIT(KC_RGUI), record)
                 ? KC_GRV: DV_QUOT;
@@ -362,15 +362,15 @@ uint16_t function_special_key_get_keycode(keyrecord_t *record, uint8_t opt)
             break;
     }
     if (!record->event.pressed) {
-        print("Unknown special key press option: "); pdec(opt); print("\n");
+        print("Unknown special key press option: "); pdec(param); print("\n");
     }
     return KC_NO;
 }
 
-void function_special_key(keyrecord_t *record, uint8_t opt)
+void function_special_key(keyrecord_t *record, uint8_t param)
 {
     action_t action;
-    uint16_t keycode = function_special_key_get_keycode(record, opt);
+    uint16_t keycode = function_special_key_get_keycode(record, param);
     if (keycode != KC_NO) {
         action.code = ACTION_MODS_KEY(0, keycode);
         process_action(record, action);
@@ -400,10 +400,10 @@ void function_toggle_shift(keyrecord_t *record, uint8_t keycode)
 
 /* Coordinate switching to cumulative_layer with two buttons, each pointing to a different intermediate_layer */
 /* Both layers must be <= 15 */
-void function_two_layer_switch(keyrecord_t *record, uint8_t opt)
+void function_two_layer_switch(keyrecord_t *record, uint8_t param)
 {
-    uint8_t intermediate_layer = opt >> 4;
-    uint8_t cumulative_layer = opt & 0xF;
+    uint8_t intermediate_layer = param >> 4;
+    uint8_t cumulative_layer = param & 0xF;
     static uint16_t one_active = 0; // bit at position L is on if a single layer in a pair leading to L is on
     bool was_on = IS_LAYER_ON(intermediate_layer);
     action_t action_intermediate = { .code = ACTION_LAYER_TAP_TOGGLE(intermediate_layer) };
@@ -419,45 +419,46 @@ void function_two_layer_switch(keyrecord_t *record, uint8_t opt)
     }
 }
 
-void function_send_macro(keyrecord_t *record, uint8_t opt)
+void function_send_macro(keyrecord_t *record, uint8_t param)
 {
     if (!record->event.pressed) return;
-    switch (opt) {
+    switch (param) {
         case PASSWORD1: MACRO_PASSWORD1;
         case PASSWORD2: MACRO_PASSWORD2;
         case PASSWORD3: MACRO_PASSWORD3;
         default:
             print("Unknown macro called\n");
-            print("opt  = "); phex(opt); print("\n");
+            print("param  = "); phex(param); print("\n");
             return;
     }
 }
 
 /* override hook */
-void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
+/* note that I've repurposed the opt and id fields */
+void action_function(keyrecord_t *record, uint8_t param /* TMK's id */, uint8_t short_id /* TMK's opt */)
 {
-    opt &= 0x7; // ignore taps
-    switch (opt) {
+    short_id &= 0x7; // ignore taps
+    switch (short_id) {
         case FUNCTION_NULLARY:
-            switch(id) {
+            switch(param) {
                 case PLOVER_SWITCH: return function_plover_key(record);
                 default:
                     print("Unknown nullary_function called\n");
-                    print("id  = "); phex(id); print("\n");
+                    print("param  = "); phex(param); print("\n");
                     return;
             }
         case SPECIAL_KEY:
-            return function_special_key(record, id);
+            return function_special_key(record, param);
         case TOGGLE_SHIFT:
-            return function_toggle_shift(record, id);
+            return function_toggle_shift(record, param);
         case TWO_KEY_FUNCTION_LAYER:
-            return function_two_layer_switch(record, id);
+            return function_two_layer_switch(record, param);
         case SEND_MACRO:
-            return function_send_macro(record, id);
+            return function_send_macro(record, param);
         default:
             print("Unknown action_function called\n");
-            print("id  = "); phex(id); print("\n");
-            print("opt = "); phex(opt); print("\n");
+            print("short_id  = "); phex(short_id); print("\n");
+            print("param = "); phex(param); print("\n");
             return;
     }
 }

@@ -78,8 +78,10 @@ enum macro_id {
 #define TSFT_R TOGGLE_SHIFT(DV_RBRC)
 
 #define PLOVER FUNCTION_NULLARY(PLOVER_SWITCH)
-#define NUM_FN FOPT_TAP(TWO_KEY_FUNCTION_LAYER, LAYER_NUMPAD)
-#define BLU_FN FOPT_TAP(TWO_KEY_FUNCTION_LAYER, LAYER_BLUESHIFT)
+
+#define TWO_LAYERS(inter, cumul) FOPT_TAP(TWO_KEY_FUNCTION_LAYER, inter<<4 | cumul)
+#define NUM_FN TWO_LAYERS(LAYER_NUMPAD, LAYER_FKEYS)
+#define BLU_FN TWO_LAYERS(LAYER_BLUESHIFT, LAYER_FKEYS)
 
 #define TO_BASE TO(LAYER_BASE)
 #define TT_BLUE TT(LAYER_BLUESHIFT)
@@ -405,18 +407,22 @@ void action_toggle_shift(keyrecord_t *record, uint8_t keycode) {
 }
 
 /* Coordinate switching to cumulative_layer with two buttons, each pointing to a different intermediate_layer */
-void action_two_layer_switch(uint8_t cumulative_layer, keyrecord_t *record, uint8_t intermediate_layer) {
-    static bool one_active = false;
+/* Both layers must be <= 15 */
+void action_two_layer_switch(keyrecord_t *record, uint8_t opt) {
+    uint8_t intermediate_layer = opt >> 4;
+    uint8_t cumulative_layer = opt & 0xF;
+    static uint16_t one_active = 0; // bit at position L is on if a single layer in a pair leading to L is on
     bool was_on = IS_LAYER_ON(intermediate_layer);
     action_t action_intermediate = { .code = ACTION_LAYER_TAP_TOGGLE(intermediate_layer) };
     process_action(record, action_intermediate);
     bool transitioned = was_on != (bool) IS_LAYER_ON(intermediate_layer);
     if (transitioned) {
-        if (one_active != was_on) { // xor
+        uint16_t mask = 1<<cumulative_layer;
+        if (!!(one_active & mask) != was_on) { // xor
             action_t action_cumulative = { .code = ACTION_LAYER_TAP_TOGGLE(cumulative_layer) };
             process_action(record, action_cumulative);
         }
-        one_active = !one_active;
+        one_active ^= mask;
     }
 }
 
@@ -454,7 +460,7 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
         case TOGGLE_SHIFT:
             return action_toggle_shift(record, id);
         case TWO_KEY_FUNCTION_LAYER:
-            return action_two_layer_switch(LAYER_FKEYS, record, id);
+            return action_two_layer_switch(record, id);
         default:
             print("Unknown action_function called\n");
             print("id  = "); phex(id); print("\n");

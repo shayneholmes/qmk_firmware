@@ -52,7 +52,7 @@ enum macro_id {
 #define LAYER_FKEYS 8
 
 /* put 8-bit options into id field, shorter id goes in 3-bit opt */
-#define FUNCTION_OPT(id,opt,tap) ACTION_FUNCTION_OPT(opt, (tap ? FUNC_TAP : 0 | id))
+#define FUNCTION_OPT(id,opt,tap) FUNC((0xFFF & ACTION_FUNCTION_OPT(opt, ((tap ? FUNC_TAP : 0) | id))))
 #define FOPT_TAP(fn,opt) FUNCTION_OPT(fn,opt,1)
 #define FOPT(fn,opt) FUNCTION_OPT(fn,opt,0)
 #define FUNCTION_NULLARY(id) FOPT(FUNCTION_NULLARY, id)

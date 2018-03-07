@@ -15,10 +15,10 @@
 /* the id field specifies an 8-bit parameter unless otherwise specified */
 enum function_id {
     FUNCTION_NULLARY, // for functions with no parameters; use id to specify
+    SEND_MACRO,
     SPECIAL_KEY,
     TOGGLE_SHIFT,
     TWO_KEY_FUNCTION_LAYER,
-    SEND_MACRO,
     LAST_FUNCTION_ID // unused; this needs to be at the end for the assert below to work
 };
 _Static_assert(LAST_FUNCTION_ID <= 8,
@@ -63,9 +63,7 @@ enum named_layer {
 #define PLOVER FUNCTION(PLOVER_SWITCH)
 
 #define SENDMACRO(fn) FPARAM(SEND_MACRO, fn)
-#define MACROQ SENDMACRO(MACRO_Q)
-#define MACROP SENDMACRO(MACRO_P)
-#define MACROK SENDMACRO(MACRO_K)
+#define MACR(macro_id) SENDMACRO(MACRO_##macro_id)
 
 #define SPECIALKEY(key) FPARAM(SPECIAL_KEY, key)
 #define SP_APCD SPECIALKEY(APOSTROPHE_CMD_TICK)
@@ -263,7 +261,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         RESET,  XXXXXXX,KC_PGUP,KC_UP,  KC_PGDN,XXXXXXX,_______,
         _______,KC_HOME,KC_LEFT,KC_DOWN,KC_RGHT,KC_END,
         _______,XXXXXXX,XXXXXXX,KC_END, KC_HOME,XXXXXXX,_______,
-        _______,_______,_______,MACROQ, MACROP,
+        _______,_______,_______,MACR(Q),MACR(K),
                                                 _______,_______,
                                                         _______,
                                         KC_LCTL,KC_LSFT,_______,

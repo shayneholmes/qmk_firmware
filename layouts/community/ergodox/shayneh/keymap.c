@@ -426,22 +426,6 @@ void action_two_layer_switch(keyrecord_t *record, uint8_t opt) {
     }
 }
 
-/**
- * To get more parameters for some key functions, swap the uses of opt and id:
- *
- *  - id is 8 bits and therefore is useful for passing big parameters, like
- *    keycodes and pairs of layers.
- *  - opt is limited to 3 bits (the MSB is used by TMK for tappability), so use
- *    it to identify which function to call.
- *
- * Although this seems to limit us to just eight functions, we can work around
- * that with a special namespacing function, FUNCTION_NULLARY, which uses its
- * 8-bit parameter to specify one of up to 256 functions to call (without
- * parameters).
- *
- * This could be extended to make another namespace for e.g. sixteen functions
- * that can take 4-bit parameters.
- **/
 void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
 {
     opt &= 0x7; // ignore taps

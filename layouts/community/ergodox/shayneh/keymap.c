@@ -35,6 +35,8 @@ enum function_parameters {
     MEDIA_FORWARD_BACK,
 };
 
+/* TMK limits this to 32 */
+/* TWO_KEY_FUNCTION_LAYER and most actions only take 16 */
 enum named_layers {
     LAYER_BASE = 0,
     LAYER_PLOVER = 4,

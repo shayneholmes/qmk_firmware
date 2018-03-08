@@ -122,21 +122,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // BASE LAYERS
 
-    [LAYER_BASE] = KEYMAP(  // customized qwerty with symbol row switched
+    [LAYER_BASE] = KEYMAP(  // software Dvorak, with symbol row reversed
         // left hand
         SP_ESCD,TSFT_1, TSFT_2, TSFT_3, TSFT_4, TSFT_5, KC_F17,
-        KC_TAB, SP_APCD,KC_W,   KC_E,   KC_R,   KC_T,   LT_MOVE,
-        KC_LSFT,KC_A,   KC_S,   KC_D,   KC_F,   KC_G,
-        KC_LCTL,KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   KC_DEL,
+        KC_TAB, SP_APCD,DV_COMM,DV_DOT, DV_P,   DV_Y,   LT_MOVE,
+        KC_LSFT,DV_A,   DV_O,   DV_E,   DV_U,   DV_I,
+        KC_LCTL,DV_SCLN,DV_Q,   DV_J,   DV_K,   DV_X,   KC_DEL,
         NUM_FN, BLU_FN, KC_LCTL,KC_LALT,KC_LGUI,
                                                 PLOVER, KC_LEAD,
                                                         KC_F16,
                                        KC_BSPC,KC_LSFT,KC_LGUI,
         // right hand
                 KC_F18, TSFT_6, TSFT_7, TSFT_8, TSFT_9, TSFT_0, KC_MPLY,
-                TT_NUM, KC_Y,   KC_U,   KC_I,   KC_O,   KC_P,   SP_MDFB,
-                        KC_H,   KC_J,   KC_K,   KC_L,   KC_SCLN,KC_RSFT,
-                KC_DEL, KC_N,   KC_M,   KC_COMM,KC_DOT, KC_SLSH,KC_RCTL,
+                TT_NUM, DV_F,   DV_G,   DV_C,   DV_R,   DV_L,   SP_MDFB,
+                        DV_D,   DV_H,   DV_T,   DV_N,   DV_S,   KC_RSFT,
+                KC_DEL, DV_B,   DV_M,   DV_W,   DV_V,   DV_Z,   KC_RCTL,
                                 KC_RGUI,KC_RALT,KC_RCTL,ALTTAB, LT_MOVE,
         SCRNSVR,KC_MPLY,
         KC_F14,
@@ -164,7 +164,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,_______,_______
     ),
 
-    KEYMAP(  // customized dvorak
+    KEYMAP(  // hardware dvorak
         // left hand
         KC_ESC, KC_1,   KC_2,   KC_3,   KC_4,   KC_5,   KC_BSLS,
         KC_TAB, KC_QUOT,KC_COMM,KC_DOT, KC_P,   KC_Y,   LT_MOVE,

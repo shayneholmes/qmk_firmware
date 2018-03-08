@@ -127,7 +127,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // left hand
         SP_ESCD,TSFT_1, TSFT_2, TSFT_3, TSFT_4, TSFT_5, KC_F17,
         KC_TAB, SP_APCD,DV_COMM,DV_DOT, DV_P,   DV_Y,   LT_MOVE,
-        KC_ESC, DV_A,   DV_O,   DV_E,   DV_U,   DV_I,
+        KC_LSFT,DV_A,   DV_O,   DV_E,   DV_U,   DV_I,
         KC_LCTL,DV_SCLN,DV_Q,   DV_J,   DV_K,   DV_X,   KC_DEL,
         NUM_FN, BLU_FN, KC_LCTL,KC_LALT,KC_LGUI,
                                                 PLOVER, KC_LEAD,

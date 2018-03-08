@@ -70,7 +70,7 @@ enum named_layer {
 #define SP_ESCD SPECIALKEY(ESCAPE_CMD_TICK)
 #define SP_MDFB SPECIALKEY(MEDIA_FORWARD_BACK)
 
-#define TOGGLE_SHIFT(key) LSFT(key)
+#define TOGGLE_SHIFT(key) FPARAM(TOGGLE_SHIFT,key)
 #define TSFT_1 TOGGLE_SHIFT(KC_1)
 #define TSFT_2 TOGGLE_SHIFT(KC_2)
 #define TSFT_3 TOGGLE_SHIFT(KC_3)
@@ -81,6 +81,7 @@ enum named_layer {
 #define TSFT_8 TOGGLE_SHIFT(KC_8)
 #define TSFT_9 TOGGLE_SHIFT(KC_9)
 #define TSFT_0 TOGGLE_SHIFT(KC_0)
+#define TSFT_GR TOGGLE_SHIFT(DV_GRV)
 
 #define TWO_LAYERS(inter, cumul) FPARAM_TAP(TWO_KEY_FUNCTION_LAYER, inter<<4 | cumul)
 #define NUM_FN TWO_LAYERS(LAYER_NUMPAD, LAYER_FKEYS)
@@ -278,7 +279,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [LAYER_BLUESHIFT] = KEYMAP(  // "BlueShift"
         // left hand
         TO_BASE,KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,
-        _______,DV_TILD,LCURLY, RCURLY, KC_PSCR,KC_BSLS,_______,
+        _______,TSFT_GR,LCURLY, RCURLY, KC_PSCR,KC_BSLS,_______,
         _______,KC_APP, KC_TAB, DV_EQL, DV_MINS,KC_INS,
         _______,_______,DV_GRV, DV_LBRC,DV_RBRC,KC_CAPS,_______,
         _______,_______,_______,_______,_______,

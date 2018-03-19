@@ -45,6 +45,7 @@
   * [RGB Lighting](feature_rgblight.md)
   * [Space Cadet](feature_space_cadet.md)
   * [Stenography](feature_stenography.md)
+  * [Swap Hands](feature_swap_hands.md)
   * [Tap Dance](feature_tap_dance.md)
   * [Terminal](feature_terminal.md)
   * [Thermal Printer](feature_thermal_printer.md)
@@ -72,7 +73,7 @@
   * [Customizing Functionality](custom_quantum_functions.md)
   * [Documentation Best Practices](documentation_best_practices.md)
   * [Documentation Templates](documentation_templates.md)
-  * [Glossary](glossary.md)
+  * [Glossary](reference_glossary.md)
   * [Keymap Overview](keymap.md)
   * [Unit Testing](unit_testing.md)
 

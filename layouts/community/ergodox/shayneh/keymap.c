@@ -96,7 +96,7 @@ enum named_layer {
 #define LCURLY LSFT(DV_LBRC)
 #define RCURLY LSFT(DV_RBRC)
 
-#define SCRNSVR LSFT(LCTL(LALT(DV_R)))
+#define SCRNSVR LCTL(LGUI(DV_R))
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Keymap 0: Default Layer

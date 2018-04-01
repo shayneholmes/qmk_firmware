@@ -14,20 +14,23 @@
 /* using the 3-bit opt field here limits this list to length 8 */
 /* the id field specifies an 8-bit parameter unless otherwise specified */
 enum function_id {
-    FUNCTION_NULLARY, // for functions with no parameters; use id to specify
-    SEND_MACRO,
-    SPECIAL_KEY,
-    TOGGLE_SHIFT,
-    TWO_KEY_FUNCTION_LAYER,
+    FUNCTION_NULLARY, // for functions with no parameters; param specifies which
+    SEND_MACRO, // param specifies which macro
+    SPECIAL_KEY, // param specifies which key
+    TOGGLE_SHIFT, // param is a keycode
+    TWO_KEY_FUNCTION_LAYER, // param is two layers
     LAST_FUNCTION_ID // unused; this needs to be at the end for the assert below to work
 };
 _Static_assert(LAST_FUNCTION_ID <= 8,
     "Too many function IDs to fit in the 3-bit opt field");
 
 /* limited to 256 */
-/* lumping these together because there's lots of room, but could be split into groups */
-/* e.g. nullary_functions, macro_id, special_key, ... */
+/* several ranges here for easier debugging (because all are unique),
+   but could be split into groups if space becomes tight;
+   e.g. nullary_functions, macro_id, special_key, ...
+   */
 enum function_parameter {
+    // nullary functions
     PLOVER_SWITCH,
     // macro ids
     MACRO_Q,
@@ -44,7 +47,7 @@ _Static_assert(LAST_FUNCTION_PARAM <= 256,
     "Too many function parameters (max 256); consider breaking this enum up");
 
 /* TMK limits this to 32 */
-/* TWO_KEY_FUNCTION_LAYER and most actions only take 16 */
+/* TWO_KEY_FUNCTION_LAYER and most actions limit to 16 */
 enum named_layer {
     LAYER_BASE = 0,
     LAYER_PLOVER = 4,

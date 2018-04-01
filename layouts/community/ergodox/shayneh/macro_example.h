@@ -7,6 +7,8 @@
 
 #define MACRO_DEF_Q     SEND_STRING_DELAY("Example!\n"); return
 
+#define MACRO_DEF_Q_S   send_string_with_delay_P(PSTR("Example!\n"), 45); return
+
 #define MACRO_DEF_P     SEND_STRING_DELAY("Another example... "); return
 
 #define MACRO_DEF_K     SEND_STRING_DELAY("And a third"); return

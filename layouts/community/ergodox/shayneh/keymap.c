@@ -504,6 +504,9 @@ void matrix_scan_user(void)
         SEQ_ONE_KEY(DV_Q) {
             MACRO_DEF_Q;
         }
+        SEQ_ONE_KEY(DV_SCLN) {
+            MACRO_DEF_Q_S;
+        }
         SEQ_ONE_KEY(DV_L) {
             MACRO_DEF_P;
         }

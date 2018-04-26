@@ -330,12 +330,14 @@ void function_plover_key(keyrecord_t *record)
     layer_invert(LAYER_PLOVER);
     bool turning_on = IS_LAYER_ON(LAYER_PLOVER);
     if (turning_on) {
-        // PHROPB
+        // PHRO*PB
         action_macro_play(MACRO(
                     DOWN(PV_LP), DOWN(PV_LH), DOWN(PV_LR),
                     DOWN(PV_O), DOWN(PV_RP), DOWN(PV_RB),
+                    DOWN(PV_STAR),
                     UP(PV_LP), UP(PV_LH), UP(PV_LR),
                     UP(PV_O), UP(PV_RP), UP(PV_RB),
+                    UP(PV_STAR),
                     END));
     } else {
         // PHRO*F

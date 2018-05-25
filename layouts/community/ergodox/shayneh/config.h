@@ -15,4 +15,7 @@
 #undef  TAPPING_TERM
 #define TAPPING_TERM    230
 
+#undef  QMK_KEYS_PER_SCAN
+#define QMK_KEYS_PER_SCAN 4
+
 #endif

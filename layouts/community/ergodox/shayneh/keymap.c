@@ -441,6 +441,7 @@ void function_two_layer_switch(keyrecord_t *record, uint8_t param)
             layer_switch_state ^= int_mask; // mark that we're updating the cumulative layer
             uint16_t cum_mask = 1UL << cumulative_layer;
             bool should_update = !!(layer_switch_state & cum_mask) == is_on; // if we're turning on and the state was already marked, or we're turning off and it wasn't marked (i.e. we were the one making it turn on)
+            should_update &= is_on != IS_LAYER_ON(cumulative_layer); // safety check: if the layer is already where we want it to be, leave it alone
             if (should_update) {
                 action_t action_cumulative = { .code = ACTION_LAYER_TAP_TOGGLE(cumulative_layer) };
                 process_action(record, action_cumulative);

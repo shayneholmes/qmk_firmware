@@ -412,24 +412,41 @@ void function_toggle_shift(keyrecord_t *record, uint8_t keycode)
     }
 }
 
-/* Coordinate switching to cumulative_layer with two buttons, each pointing to a different intermediate_layer */
-/* Both layers must be <= 15 */
+/* Coordinate switching to cumulative_layer with two buttons, each pointing to
+ * a different intermediate_layer.
+ *
+ * This is a substitute for update_tri_layer that lets you create two buttons
+ * that point to the same layer but are not all part of the same tri-layer
+ * combinations.
+ *
+ * Whenever a two-layer-switch button is pressed, its "cumulative" layer is
+ * checked to see if another two-layer button (with a different immediate
+ * layer) has already been pressed; if so, the cumulative layer's state will be
+ * set with this one (when it changes).
+ *
+ * Both layers must be <= 15.
+ */
 void function_two_layer_switch(keyrecord_t *record, uint8_t param)
 {
     uint8_t intermediate_layer = param >> 4;
     uint8_t cumulative_layer = param & 0xF;
-    static uint16_t one_active = 0; // bit at position L is on if a single layer in a pair leading to L is on
+    static uint16_t layer_switch_state = 0; // bit at position L is on iff a single layer in a pair leading to layer L is on, or if layer L set the bit for its cumulative layer (as a safety check)
     bool was_on = IS_LAYER_ON(intermediate_layer);
     action_t action_intermediate = { .code = ACTION_LAYER_TAP_TOGGLE(intermediate_layer) };
     process_action(record, action_intermediate);
-    bool transitioned = was_on != (bool) IS_LAYER_ON(intermediate_layer);
-    if (transitioned) {
-        uint16_t mask = 1<<cumulative_layer;
-        if (!!(one_active & mask) != was_on) { // xor
-            action_t action_cumulative = { .code = ACTION_LAYER_TAP_TOGGLE(cumulative_layer) };
-            process_action(record, action_cumulative);
+    bool is_on = IS_LAYER_ON(intermediate_layer);
+    if (is_on != was_on) { // transition occurred
+        uint16_t int_mask = 1UL << intermediate_layer;
+        if (!!(layer_switch_state & int_mask) == was_on) { // safety check: only update the cumulative layer if this key is not the one that marked the cumulative layer
+            layer_switch_state ^= int_mask; // mark that we're updating the cumulative layer
+            uint16_t cum_mask = 1UL << cumulative_layer;
+            bool should_update = !!(layer_switch_state & cum_mask) == is_on; // if we're turning on and the state was already marked, or we're turning off and it wasn't marked (i.e. we were the one making it turn on)
+            if (should_update) {
+                action_t action_cumulative = { .code = ACTION_LAYER_TAP_TOGGLE(cumulative_layer) };
+                process_action(record, action_cumulative);
+            }
+            layer_switch_state ^= cum_mask; // change it either way, either mark or unmark
         }
-        one_active ^= mask;
     }
 }
 

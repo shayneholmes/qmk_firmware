@@ -12,3 +12,5 @@
 #define MACRO_DEF_P     SEND_STRING_DELAY("Another example... "); return
 
 #define MACRO_DEF_K     SEND_STRING_DELAY("And a third"); return
+
+#define MACRO_DEF_D     SEND_STRING_DELAY("One more..."); return

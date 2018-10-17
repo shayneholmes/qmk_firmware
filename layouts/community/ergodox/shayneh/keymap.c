@@ -36,6 +36,7 @@ enum function_parameter {
     MACRO_Q,
     MACRO_P,
     MACRO_K,
+    MACRO_D,
     // special keys
     APOSTROPHE_CMD_TICK,
     ESCAPE_CMD_TICK,
@@ -458,6 +459,7 @@ void function_send_macro(keyrecord_t *record, uint8_t param)
         case MACRO_Q: MACRO_DEF_Q;
         case MACRO_P: MACRO_DEF_P;
         case MACRO_K: MACRO_DEF_K;
+        case MACRO_D: MACRO_DEF_D;
         default:
             print("Unknown macro called\n");
             print("param  = "); phex(param); print("\n");
@@ -532,6 +534,9 @@ void matrix_scan_user(void)
         }
         SEQ_ONE_KEY(DV_L) {
             MACRO_DEF_P;
+        }
+        SEQ_ONE_KEY(DV_D) {
+            MACRO_DEF_D;
         }
         SEQ_ONE_KEY(DV_K) {
             MACRO_DEF_K;

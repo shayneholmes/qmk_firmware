@@ -34,7 +34,7 @@ enum function_parameter {
     PLOVER_SWITCH,
     // macro ids
     MACRO_Q,
-    MACRO_P,
+    MACRO_L,
     MACRO_K,
     MACRO_D,
     // special keys
@@ -457,7 +457,7 @@ void function_send_macro(keyrecord_t *record, uint8_t param)
     if (!record->event.pressed) return;
     switch (param) {
         case MACRO_Q: MACRO_DEF_Q;
-        case MACRO_P: MACRO_DEF_P;
+        case MACRO_L: MACRO_DEF_L;
         case MACRO_K: MACRO_DEF_K;
         case MACRO_D: MACRO_DEF_D;
         default:
@@ -533,7 +533,7 @@ void matrix_scan_user(void)
             MACRO_DEF_Q_S;
         }
         SEQ_ONE_KEY(DV_L) {
-            MACRO_DEF_P;
+            MACRO_DEF_L;
         }
         SEQ_ONE_KEY(DV_D) {
             MACRO_DEF_D;

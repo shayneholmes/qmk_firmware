@@ -127,7 +127,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // BASE LAYERS
 
-    [LAYER_BASE] = KEYMAP(  // software Dvorak, with symbol row reversed
+    [LAYER_BASE] = LAYOUT_ergodox(  // software Dvorak, with symbol row reversed
         // left hand
         SP_ESCD,TSFT_1, TSFT_2, TSFT_3, TSFT_4, TSFT_5, KC_F17,
         KC_TAB, SP_APCD,DV_COMM,DV_DOT, DV_P,   DV_Y,   LT_MOVE,
@@ -148,7 +148,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_ENT, TT_BLUE,KC_SPC
     ),
 
-    KEYMAP(  // transparent because this gets triggered more than I'd like
+    LAYOUT_ergodox(  // transparent because this gets triggered more than I'd like
         // left hand
         _______,_______,_______,_______,_______,_______,_______,
         _______,_______,_______,_______,_______,_______,_______,
@@ -169,7 +169,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,_______,_______
     ),
 
-    KEYMAP(  // hardware dvorak
+    LAYOUT_ergodox(  // hardware dvorak
         // left hand
         KC_ESC, KC_1,   KC_2,   KC_3,   KC_4,   KC_5,   KC_BSLS,
         KC_TAB, KC_QUOT,KC_COMM,KC_DOT, KC_P,   KC_Y,   LT_MOVE,
@@ -190,7 +190,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_ENT, TT_BLUE,KC_SPC
     ),
 
-    KEYMAP(  // qwerty
+    LAYOUT_ergodox(  // qwerty
         // left hand
         _______,KC_1,   KC_2,   KC_3,   KC_4,   KC_5,   _______,
         _______,KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,   _______,
@@ -213,7 +213,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // PLOVER (SPECIAL CASE)
 
-    [LAYER_PLOVER] = KEYMAP(  // Steno for Plover
+    [LAYER_PLOVER] = LAYOUT_ergodox(  // Steno for Plover
         // transparencies are for media keys
 
         // left hand
@@ -238,7 +238,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // MODIFIERS THAT MIGHT BE STICKY
 
-    [LAYER_NUMPAD] = KEYMAP(  // mouse + numpad
+    [LAYER_NUMPAD] = LAYOUT_ergodox(  // mouse + numpad
         #define NUM_CLN LSFT(DV_SCLN)
         // left hand
         TO_BASE,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,KC_PAUS,KC_PSCR,
@@ -260,7 +260,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_ENT, _______,_______
     ),
 
-    [LAYER_MOVEMENT] = KEYMAP(  // F-keys + cursor
+    [LAYER_MOVEMENT] = LAYOUT_ergodox(  // F-keys + cursor
         // left hand
         TO_BASE,KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,
         RESET,  XXXXXXX,KC_PGUP,KC_UP,  KC_PGDN,XXXXXXX,_______,
@@ -280,7 +280,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______,KC_RSFT,KC_RCTL
     ),
 
-    [LAYER_BLUESHIFT] = KEYMAP(  // "BlueShift"
+    [LAYER_BLUESHIFT] = LAYOUT_ergodox(  // "BlueShift"
         // left hand
         TO_BASE,KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,
         _______,TSFT_GR,LCURLY, RCURLY, KC_PSCR,KC_BSLS,_______,
@@ -303,7 +303,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // MODIFIERS THAT WON'T BE STICKY
 
-    [LAYER_FKEYS] = KEYMAP(  // F-keys only
+    [LAYER_FKEYS] = LAYOUT_ergodox(  // F-keys only
         // left hand
         TO_BASE,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,
         _______,KC_F13, KC_F14, KC_F15, KC_F16, XXXXXXX,_______,

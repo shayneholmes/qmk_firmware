@@ -18,4 +18,6 @@
 #undef  QMK_KEYS_PER_SCAN
 #define QMK_KEYS_PER_SCAN 4
 
+#define LEADER_TIMEOUT 300
+
 #endif

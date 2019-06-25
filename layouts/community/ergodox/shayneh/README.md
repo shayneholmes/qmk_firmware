@@ -22,7 +22,7 @@
 
 * Private macros - the macro.h file is ignored by git so your macros won't be
   stored in the repo. (There's a fallback example macro.h to show you the
-ropes.)
+  ropes.)
 
 ## Layers
 

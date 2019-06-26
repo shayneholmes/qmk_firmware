@@ -49,8 +49,11 @@ _Static_assert(LAST_FUNCTION_PARAM <= 256,
 
 /* TMK limits this to 32 */
 /* TWO_KEY_FUNCTION_LAYER and most actions limit to 16 */
-enum named_layer {
+enum layer_id {
     LAYER_BASE = 0,
+    LAYER_TRANSPARENT = 1,
+    LAYER_HARWARE_DVORAK = 2,
+    LAYER_QWERTY = 3,
     LAYER_PLOVER = 4,
     LAYER_NUMPAD = 5,
     LAYER_MOVEMENT = 6,
@@ -148,7 +151,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_ENT, TT_BLUE,KC_SPC
     ),
 
-    LAYOUT_ergodox(  // transparent because this gets triggered more than I'd like
+    [LAYER_TRANSPARENT] = LAYOUT_ergodox(  // I trigger this more often than I'd like
         // left hand
         _______,_______,_______,_______,_______,_______,_______,
         _______,_______,_______,_______,_______,_______,_______,
@@ -169,7 +172,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,_______,_______
     ),
 
-    LAYOUT_ergodox(  // hardware dvorak
+    [LAYER_HARWARE_DVORAK] LAYOUT_ergodox(
         // left hand
         KC_ESC, KC_1,   KC_2,   KC_3,   KC_4,   KC_5,   KC_BSLS,
         KC_TAB, KC_QUOT,KC_COMM,KC_DOT, KC_P,   KC_Y,   LT_MOVE,
@@ -190,7 +193,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_ENT, TT_BLUE,KC_SPC
     ),
 
-    LAYOUT_ergodox(  // qwerty
+    [LAYER_QWERTY] = LAYOUT_ergodox(
         // left hand
         _______,KC_1,   KC_2,   KC_3,   KC_4,   KC_5,   _______,
         _______,KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,   _______,
@@ -213,7 +216,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // PLOVER (SPECIAL CASE)
 
-    [LAYER_PLOVER] = LAYOUT_ergodox(  // Steno for Plover
+    [LAYER_PLOVER] = LAYOUT_ergodox(
         // transparencies are for media keys
 
         // left hand

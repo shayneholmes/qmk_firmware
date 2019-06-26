@@ -8,7 +8,7 @@
 #undef DESCRIPTION
 #define MANUFACTURER    Shayne Holmes
 #define PRODUCT         Ergodox
-#define DESCRIPTION     QMK firmware for Ergodox; with a custom layout by ShayneH
+#define DESCRIPTION     QMK firmware for Ergodox; layout by Shayne Holmes
 
 #undef  TAPPING_TOGGLE
 #define TAPPING_TOGGLE  2

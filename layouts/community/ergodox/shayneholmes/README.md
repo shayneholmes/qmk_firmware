@@ -2,7 +2,7 @@
 
 ## Information
 
-[Up-to-date version](https://github.com/shayneholmes/qmk_firmware/tree/shayneholmes/layouts/community/ergodox/shayneh)
+[Up-to-date version](https://github.com/shayneholmes/qmk_firmware/tree/shayneholmes/layouts/community/ergodox/shayneholmes)
 (with latest tweaks)
 
 ## Priorities:

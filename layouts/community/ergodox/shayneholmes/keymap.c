@@ -518,7 +518,7 @@ void matrix_scan_user(void)
     ergodox_board_led_off();
     switch (layer) {
         case 0:
-			// none
+            // none
             break;
         default:
             ergodox_board_led_on();

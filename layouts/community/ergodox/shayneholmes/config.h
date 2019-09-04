@@ -15,7 +15,7 @@
 #undef  TAPPING_TERM
 #define TAPPING_TERM    230
 
-#define DEBOUNCE 25
+#define DEBOUNCE 50
 
 #undef  QMK_KEYS_PER_SCAN
 #define QMK_KEYS_PER_SCAN 4

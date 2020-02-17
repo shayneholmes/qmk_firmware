@@ -429,30 +429,87 @@ void function_toggle_shift(keyrecord_t *record, uint8_t keycode)
  * set with this one (when it changes).
  *
  * Both layers must be <= 15.
+ *
+ * Costs ~300 bytes.
  */
 void function_two_layer_switch(keyrecord_t *record, uint8_t param)
 {
-    uint8_t intermediate_layer = param >> 4;
-    uint8_t cumulative_layer = param & 0xF;
-    static uint16_t layer_switch_state = 0; // bit at position L is on iff a single layer in a pair leading to layer L is on, or if layer L set the bit for its cumulative layer (as a safety check)
-    bool was_on = IS_LAYER_ON(intermediate_layer);
+    /* layer_switch_state holds state that is maintained between calls. The bit
+     * at position L is on if either of the following is true:
+     *
+     * - L is an intermediate layer that is on.
+     *
+     * - L is a cumulative layer that is off, with one (and only one)
+     *   intermediate layer on.
+     */
+    static uint16_t layer_switch_state = 0;
+
+    // Read parameters.
+    const uint8_t intermediate_layer = param >> 4;
+    const uint8_t cumulative_layer = param & 0xF;
+
+    const uint16_t intermediate_mask = 1UL << intermediate_layer;
+    const uint16_t cumulative_mask = 1UL << cumulative_layer;
+
+    bool old_intermediate_state = IS_LAYER_ON(intermediate_layer);
     action_t action_intermediate = { .code = ACTION_LAYER_TAP_TOGGLE(intermediate_layer) };
     process_action(record, action_intermediate);
-    bool is_on = IS_LAYER_ON(intermediate_layer);
-    if (is_on != was_on) { // transition occurred
-        uint16_t int_mask = 1UL << intermediate_layer;
-        if (!!(layer_switch_state & int_mask) == was_on) { // safety check: only update the cumulative layer if this key is not the one that marked the cumulative layer
-            layer_switch_state ^= int_mask; // mark that we're updating the cumulative layer
-            uint16_t cum_mask = 1UL << cumulative_layer;
-            bool should_update = !!(layer_switch_state & cum_mask) == is_on; // if we're turning on and the state was already marked, or we're turning off and it wasn't marked (i.e. we were the one making it turn on)
-            should_update &= is_on != IS_LAYER_ON(cumulative_layer); // safety check: if the layer is already where we want it to be, leave it alone
-            if (should_update) {
-                action_t action_cumulative = { .code = ACTION_LAYER_TAP_TOGGLE(cumulative_layer) };
-                process_action(record, action_cumulative);
-            }
-            layer_switch_state ^= cum_mask; // change it either way, either mark or unmark
-        }
+    bool new_intermediate_state = IS_LAYER_ON(intermediate_layer);
+    if (new_intermediate_state == old_intermediate_state) {
+        // No transition occurred in the intermediate layer, probably because
+        // of TAP_TOGGLE. Don't update the cumulative layer.
+        return;
     }
+
+    // Ensure static state is in sync.
+    bool intermediate_layer_was_marked = layer_switch_state & intermediate_mask;
+    if (intermediate_layer_was_marked != old_intermediate_state) {
+        // The intermediate layer we toggled was out of sync with its marked
+        // state. This often happens when a layer is changed by a non-two-layer
+        // key, like resetting all the layers via TO(0).
+        //
+        // Since we toggled the intermediate layer, the static state is now in
+        // sync, but don't change anything else.
+        return;
+    }
+
+    // Update static state: toggle the intermediate and cumulative layers.
+    layer_switch_state ^= intermediate_mask | cumulative_mask;
+
+    /*
+     * Terse, but believed correct. Derivation:
+     *
+     * +---- new_intermediate_state
+     * | +-- cumulative_was_marked
+     * | |   Meaning
+     * ---------------
+     * 0 0   Intermediate was turned off, and cumulative was on (since this
+     *       intermediate was on, it must have had both intermediates on). Turn
+     *       the cumulative layer off.
+     *
+     * 0 1   Intermediate was turned off, and cumulative was off with one
+     *       intermediate on. No change.
+     *
+     * 1 0   Intermediate was turned on, and cumulative was off. No change.
+     *
+     * 1 1   Intermediate was turned on, and cumulative was off with one
+     *       intermediate on. Turn the cumulative layer on.
+     */
+    const bool cumulative_was_marked = !(layer_switch_state & cumulative_mask);
+    const bool should_update = new_intermediate_state == cumulative_was_marked;
+    if (!should_update) {
+        return;
+    }
+
+    const bool target_cumulative_layer_state = new_intermediate_state;
+    if (IS_LAYER_ON(cumulative_layer) == target_cumulative_layer_state) {
+        // Unexpected: Cumulative layer was already in the state we wanted it to be in.
+        return;
+    }
+
+    // Toggle the cumulative layer.
+    action_t action_cumulative = { .code = ACTION_LAYER_TAP_TOGGLE(cumulative_layer) };
+    process_action(record, action_cumulative);
 }
 
 void function_send_macro(keyrecord_t *record, uint8_t param)

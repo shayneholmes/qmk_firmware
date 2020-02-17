@@ -14,7 +14,7 @@
 #define TAPPING_TOGGLE  3
 #undef  TAPPING_TERM
 #define TAPPING_TERM    230
-
+#undef  DEBOUNCE
 #define DEBOUNCE 50
 
 #undef  QMK_KEYS_PER_SCAN

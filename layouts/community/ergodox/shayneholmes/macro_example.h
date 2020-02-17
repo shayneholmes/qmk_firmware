@@ -3,14 +3,12 @@
  * It will get ignored by git.
  */
 
-#define SEND_STRING_DELAY(str) send_string_with_delay_P(PSTR(str), 15)
+#define MACRO_DEF_Q     SEND_STRING_DELAY("Example!\n", 15); return
 
-#define MACRO_DEF_Q     SEND_STRING_DELAY("Example!\n"); return
+#define MACRO_DEF_Q_S   SEND_STRING_DELAY("Example!\n", 45); return
 
-#define MACRO_DEF_Q_S   send_string_with_delay_P(PSTR("Example!\n"), 45); return
+#define MACRO_DEF_L     SEND_STRING_DELAY("Another example... ", 15); return
 
-#define MACRO_DEF_L     SEND_STRING_DELAY("Another example... "); return
+#define MACRO_DEF_K     SEND_STRING_DELAY("And a third", 15); return
 
-#define MACRO_DEF_K     SEND_STRING_DELAY("And a third"); return
-
-#define MACRO_DEF_D     SEND_STRING_DELAY("One more..."); return
+#define MACRO_DEF_D     SEND_STRING_DELAY("One more...", 15); return

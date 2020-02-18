@@ -501,8 +501,9 @@ void action_function(keyrecord_t *record, uint8_t param /* TMK's id */, uint8_t 
 }
 
 /* override hook */
-void matrix_init_user(void)
+void keyboard_post_init_user(void)
 {
+    // blink light once
     ergodox_board_led_on();
     _delay_ms(250);
     ergodox_board_led_off();

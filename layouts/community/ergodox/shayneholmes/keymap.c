@@ -139,7 +139,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         NUM_FN, BLU_FN, KC_LCTL,KC_LALT,KC_LGUI,
                                                 PLOVER, KC_LEAD,
                                                         KC_F16,
-                                       KC_BSPC,KC_LSFT,KC_LGUI,
+                                        KC_BSPC,KC_LSFT,KC_LCTL,
         // right hand
                 KC_F18, TSFT_6, TSFT_7, TSFT_8, TSFT_9, TSFT_0, KC_MPLY,
                 TT_NUM, DV_F,   DV_G,   DV_C,   DV_R,   DV_L,   SP_MDFB,

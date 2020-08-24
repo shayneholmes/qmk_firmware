@@ -132,20 +132,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [LAYER_BASE] = LAYOUT_ergodox(  // software Dvorak, with symbol row reversed
         // left hand
-        SP_ESCD,TSFT_1, TSFT_2, TSFT_3, TSFT_4, TSFT_5, KC_F17,
-        KC_TAB, SP_APCD,DV_COMM,DV_DOT, DV_P,   DV_Y,   LT_MOVE,
-        KC_LSFT,DV_A,   DV_O,   DV_E,   DV_U,   DV_I,
-        KC_LCTL,DV_SCLN,DV_Q,   DV_J,   DV_K,   DV_X,   KC_DEL,
-        NUM_FN, BLU_FN, KC_LCTL,KC_LALT,KC_LGUI,
+        SP_ESCD,TSFT_1,     TSFT_2,     TSFT_3,     TSFT_4,     TSFT_5, KC_F17,
+        KC_TAB, SP_APCD,    DV_COMM,    DV_DOT,     DV_P,       DV_Y,   LT_MOVE,
+        KC_LSFT,SFT_T(DV_A),CTL_T(DV_O),ALT_T(DV_E),GUI_T(DV_U),DV_I,
+        KC_LCTL,DV_SCLN,    DV_Q,       DV_J,       DV_K,       DV_X,   KC_DEL,
+        NUM_FN, BLU_FN,     KC_LCTL,    KC_LALT,    KC_LGUI,
                                                 PLOVER, KC_LEAD,
                                                         KC_F16,
                                         KC_BSPC,KC_LSFT,KC_LCTL,
         // right hand
-                KC_F18, TSFT_6, TSFT_7, TSFT_8, TSFT_9, TSFT_0, KC_MPLY,
-                TT_NUM, DV_F,   DV_G,   DV_C,   DV_R,   DV_L,   SP_MDFB,
-                        DV_D,   DV_H,   DV_T,   DV_N,   DV_S,   KC_RSFT,
-                KC_DEL, DV_B,   DV_M,   DV_W,   DV_V,   DV_Z,   KC_RCTL,
-                                KC_RGUI,KC_RALT,KC_RCTL,ALTTAB, LT_MOVE,
+                KC_F18, TSFT_6, TSFT_7,     TSFT_8,     TSFT_9,     TSFT_0,     KC_MPLY,
+                TT_NUM, DV_F,   DV_G,       DV_C,       DV_R,       DV_L,       SP_MDFB,
+                        DV_D,   GUI_T(DV_H),ALT_T(DV_T),CTL_T(DV_N),SFT_T(DV_S),KC_RSFT,
+                KC_DEL, DV_B,   DV_M,       DV_W,       DV_V,       DV_Z,       KC_RCTL,
+                                KC_RGUI,    KC_RALT,    KC_RCTL,    ALTTAB,     LT_MOVE,
         SCRNSVR,KC_MPLY,
         KC_F14,
         KC_ENT, TT_BLUE,KC_SPC

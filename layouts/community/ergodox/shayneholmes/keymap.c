@@ -380,7 +380,7 @@ uint16_t function_special_key_get_keycode(keyrecord_t *record, uint8_t param)
             break;
     }
     if (!record->event.pressed) {
-        print("Unknown special key press option: "); pdec(param); print("\n");
+        print("Unknown special key press option: "); print_dec(param); print("\n");
     }
     return KC_NO;
 }
@@ -522,7 +522,7 @@ void function_send_macro(keyrecord_t *record, uint8_t param)
         case MACRO_D: MACRO_DEF_D;
         default:
             print("Unknown macro called\n");
-            print("param  = "); phex(param); print("\n");
+            print("param  = "); print_hex8(param); print("\n");
             return;
     }
 }
@@ -538,7 +538,7 @@ void action_function(keyrecord_t *record, uint8_t param /* TMK's id */, uint8_t 
                 case PLOVER_SWITCH: return function_plover_key(record);
                 default:
                     print("Unknown nullary_function called\n");
-                    print("param  = "); phex(param); print("\n");
+                    print("param  = "); print_hex8(param); print("\n");
                     return;
             }
         case SPECIAL_KEY:
@@ -551,8 +551,8 @@ void action_function(keyrecord_t *record, uint8_t param /* TMK's id */, uint8_t 
             return function_send_macro(record, param);
         default:
             print("Unknown action_function called\n");
-            print("short_id  = "); phex(short_id); print("\n");
-            print("param = "); phex(param); print("\n");
+            print("short_id  = "); print_hex8(short_id); print("\n");
+            print("param = "); print_hex8(param); print("\n");
             return;
     }
 }

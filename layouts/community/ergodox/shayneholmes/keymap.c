@@ -61,6 +61,9 @@ enum layer_id {
     LAYER_FKEYS = 8,
 };
 
+// Alias for function layers than expand past FN31
+#define FUNC(kc) (QK_FUNCTION | (kc))
+
 /* put 8-bit params into id field, shorter fn goes in 3-bit opt */
 #define FUNCTION_PARAMS(fn,param,tap) FUNC((0xFFF & ACTION_FUNCTION_OPT(param, ((tap ? FUNC_TAP : 0) | fn))))
 #define FPARAM_TAP(fn,param) FUNCTION_PARAMS(fn,param,1)

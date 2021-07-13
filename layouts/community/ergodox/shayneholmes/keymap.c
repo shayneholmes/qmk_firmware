@@ -40,12 +40,15 @@ enum function_parameter {
     // special keys
     APOSTROPHE_CMD_TICK,
     ESCAPE_CMD_TICK,
-    MEDIA_FORWARD_BACK,
     // placeholder
     LAST_FUNCTION_PARAM
 };
 _Static_assert(LAST_FUNCTION_PARAM <= 256,
     "Too many function parameters (max 256); consider breaking this enum up");
+
+enum my_keycodes {
+  FWDBACK = SAFE_RANGE
+};
 
 /* TMK limits this to 32 */
 /* TWO_KEY_FUNCTION_LAYER and most actions limit to 16 */
@@ -75,7 +78,6 @@ enum layer_id {
 #define SPECIALKEY(key) FPARAM(SPECIAL_KEY, key)
 #define SP_APCD SPECIALKEY(APOSTROPHE_CMD_TICK)
 #define SP_ESCD SPECIALKEY(ESCAPE_CMD_TICK)
-#define SP_MDFB SPECIALKEY(MEDIA_FORWARD_BACK)
 
 #define TOGGLE_SHIFT(key) FPARAM(TOGGLE_SHIFT,key)
 #define TSFT_1 TOGGLE_SHIFT(KC_1)
@@ -142,7 +144,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                         KC_BSPC,KC_LSFT,KC_LCTL,
         // right hand
                 KC_F18, TSFT_6, TSFT_7,     TSFT_8,     TSFT_9,     TSFT_0,     KC_MPLY,
-                TT_NUM, DV_F,   DV_G,       DV_C,       DV_R,       DV_L,       SP_MDFB,
+                TT_NUM, DV_F,   DV_G,       DV_C,       DV_R,       DV_L,       FWDBACK,
                         DV_D,   GUI_T(DV_H),ALT_T(DV_T),CTL_T(DV_N),SFT_T(DV_S),KC_RSFT,
                 KC_DEL, DV_B,   DV_M,       DV_W,       DV_V,       DV_Z,       KC_RCTL,
                                 KC_RGUI,    KC_RALT,    KC_RCTL,    ALTTAB,     LT_MOVE,
@@ -373,9 +375,6 @@ uint16_t function_special_key_get_keycode(keyrecord_t *record, uint8_t param)
         case ESCAPE_CMD_TICK:
             return are_mods_pressed(MOD_BIT(KC_LGUI) | MOD_BIT(KC_RGUI), record)
                 ? KC_GRV: KC_ESC;
-        case MEDIA_FORWARD_BACK:
-            return are_mods_pressed(MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT), record)
-                ? KC_MEDIA_PREV_TRACK: KC_MEDIA_NEXT_TRACK;
         default:
             break;
     }
@@ -524,6 +523,30 @@ void function_send_macro(keyrecord_t *record, uint8_t param)
             print("Unknown macro called\n");
             print("param  = "); print_hex8(param); print("\n");
             return;
+    }
+}
+
+/* override hook */
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch(keycode) {
+        case FWDBACK:
+            // Next track, or previous track if shift is pressed.
+            if (!record->event.pressed) return false;
+            uint8_t savedmods = get_mods();
+            bool shift_pressed = savedmods & (MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT));
+            if (shift_pressed) {
+                del_mods(MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT));
+                send_keyboard_report();
+            }
+            uint8_t keycode = shift_pressed ? KC_MEDIA_PREV_TRACK : KC_MEDIA_NEXT_TRACK;
+            tap_code(keycode);
+            if (shift_pressed) {
+                set_mods(savedmods);
+                send_keyboard_report();
+            }
+            return false;
+        default:
+            return true;
     }
 }
 

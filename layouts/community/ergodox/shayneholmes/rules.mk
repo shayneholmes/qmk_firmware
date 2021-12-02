@@ -1,4 +1,4 @@
-BOOTMAGIC_ENABLE := full     # Virtual DIP switch configuration (+790)
+BOOTMAGIC_ENABLE := yes      # Virtual DIP switch configuration (+790)
 TAP_DANCE_ENABLE := no       # Tap dance (+1034)
 MOUSEKEY_ENABLE  := no       # Mouse keys(+4700)
 CONSOLE_ENABLE   := yes      # Console for debug(+400)
@@ -18,7 +18,7 @@ LEADER_ENABLE := yes         # Leader keys
 UNICODEMAP_ENABLE := no
 UNICODE_ENABLE := no
 
-DEBOUNCE_TYPE := eager_pk
+DEBOUNCE_TYPE := sym_eager_pk
 
 ifneq ("$(wildcard $(LAYOUT_KEYMAP_PATH)/macro.h)","")
 $(info "Found a customized macro file.")

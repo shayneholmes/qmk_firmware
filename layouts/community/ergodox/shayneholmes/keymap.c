@@ -10,48 +10,50 @@
 #include "macro_example.h"
 #endif
 
-/* id for user defined functions */
-/* using the 3-bit opt field here limits this list to length 8 */
-/* the id field specifies an 8-bit parameter unless otherwise specified */
-enum function_id {
-    FUNCTION_NULLARY, // for functions with no parameters; param specifies which
-    SEND_MACRO, // param specifies which macro
-    SPECIAL_KEY, // param specifies which key
-    TOGGLE_SHIFT, // param is a keycode
-    TWO_KEY_FUNCTION_LAYER, // param is two layers
-    LAST_FUNCTION_ID // unused; this needs to be at the end for the assert below to work
-};
-_Static_assert(LAST_FUNCTION_ID <= 8,
-    "Too many function IDs to fit in the 3-bit opt field");
+enum custom_keycodes {
+  FWDBACK = SAFE_RANGE,
 
-/* limited to 256 */
-/* several ranges here for easier debugging (because all are unique),
-   but could be split into groups if space becomes tight;
-   e.g. nullary_functions, macro_id, special_key, ...
-   */
-enum function_parameter {
-    // nullary functions
-    PLOVER_SWITCH,
-    // macro ids
-    MACRO_Q,
-    MACRO_L,
-    MACRO_K,
-    MACRO_D,
-    // special keys
-    APOSTROPHE_CMD_TICK,
-    ESCAPE_CMD_TICK,
-    // placeholder
-    LAST_FUNCTION_PARAM
-};
-_Static_assert(LAST_FUNCTION_PARAM <= 256,
-    "Too many function parameters (max 256); consider breaking this enum up");
+  PLOVER,
 
-enum my_keycodes {
-  FWDBACK = SAFE_RANGE
+  MACRO_MIN,
+  MACRO_Q,
+  MACRO_L,
+  MACRO_K,
+  MACRO_D,
+  MACRO_MAX,
+
+  TOGGLE_SHIFT_MIN,
+  TOGGLE_SHIFT_KC_1,
+  TOGGLE_SHIFT_KC_2,
+  TOGGLE_SHIFT_KC_3,
+  TOGGLE_SHIFT_KC_4,
+  TOGGLE_SHIFT_KC_5,
+  TOGGLE_SHIFT_KC_6,
+  TOGGLE_SHIFT_KC_7,
+  TOGGLE_SHIFT_KC_8,
+  TOGGLE_SHIFT_KC_9,
+  TOGGLE_SHIFT_KC_0,
+  TOGGLE_SHIFT_DV_GRV,
+  TOGGLE_SHIFT_MAX,
+
+  SPECIAL_KEY_MIN,
+  SPECIAL_APOSTROPHE_CMD_TICK,
+  SPECIAL_ESCAPE_CMD_TICK,
+  SPECIAL_KEY_MAX,
+
+  TWOLAYER_MIN,
+  TWOLAYER_NUM_FN,
+  TWOLAYER_BLU_FN,
+  TWOLAYER_MAX,
+
+  NEW_SAFE_RANGE, // set new safe range
 };
+
+_Static_assert(NEW_SAFE_RANGE <= (uint16_t) QK_MOD_TAP,
+        "Too many codes, they don't fit in the allotted space");
 
 /* TMK limits this to 32 */
-/* TWO_KEY_FUNCTION_LAYER and most actions limit to 16 */
+/* Most actions limit to 16 */
 enum layer_id {
     LAYER_BASE = 0,
     LAYER_TRANSPARENT = 1,
@@ -64,37 +66,23 @@ enum layer_id {
     LAYER_FKEYS = 8,
 };
 
-/* put 8-bit params into id field, shorter fn goes in 3-bit opt */
-#define FUNCTION_PARAMS(fn,param,tap) F((0xFFF & ACTION_FUNCTION_OPT(param, ((tap ? FUNC_TAP : 0) | fn))))
-#define FPARAM_TAP(fn,param) FUNCTION_PARAMS(fn,param,1)
-#define FPARAM(fn,param) FUNCTION_PARAMS(fn,param,0)
+#define SP_APCD SPECIAL_APOSTROPHE_CMD_TICK
+#define SP_ESCD SPECIAL_ESCAPE_CMD_TICK
 
-#define FUNCTION(fn) FPARAM(FUNCTION_NULLARY, fn)
-#define PLOVER FUNCTION(PLOVER_SWITCH)
+#define TSFT_1  TOGGLE_SHIFT_KC_1
+#define TSFT_2  TOGGLE_SHIFT_KC_2
+#define TSFT_3  TOGGLE_SHIFT_KC_3
+#define TSFT_4  TOGGLE_SHIFT_KC_4
+#define TSFT_5  TOGGLE_SHIFT_KC_5
+#define TSFT_6  TOGGLE_SHIFT_KC_6
+#define TSFT_7  TOGGLE_SHIFT_KC_7
+#define TSFT_8  TOGGLE_SHIFT_KC_8
+#define TSFT_9  TOGGLE_SHIFT_KC_9
+#define TSFT_0  TOGGLE_SHIFT_KC_0
+#define TSFT_GR TOGGLE_SHIFT_DV_GRV
 
-#define SENDMACRO(fn) FPARAM(SEND_MACRO, fn)
-#define MACR(macro_id) SENDMACRO(MACRO_##macro_id)
-
-#define SPECIALKEY(key) FPARAM(SPECIAL_KEY, key)
-#define SP_APCD SPECIALKEY(APOSTROPHE_CMD_TICK)
-#define SP_ESCD SPECIALKEY(ESCAPE_CMD_TICK)
-
-#define TOGGLE_SHIFT(key) FPARAM(TOGGLE_SHIFT,key)
-#define TSFT_1 TOGGLE_SHIFT(KC_1)
-#define TSFT_2 TOGGLE_SHIFT(KC_2)
-#define TSFT_3 TOGGLE_SHIFT(KC_3)
-#define TSFT_4 TOGGLE_SHIFT(KC_4)
-#define TSFT_5 TOGGLE_SHIFT(KC_5)
-#define TSFT_6 TOGGLE_SHIFT(KC_6)
-#define TSFT_7 TOGGLE_SHIFT(KC_7)
-#define TSFT_8 TOGGLE_SHIFT(KC_8)
-#define TSFT_9 TOGGLE_SHIFT(KC_9)
-#define TSFT_0 TOGGLE_SHIFT(KC_0)
-#define TSFT_GR TOGGLE_SHIFT(DV_GRV)
-
-#define TWO_LAYERS(inter, cumul) FPARAM_TAP(TWO_KEY_FUNCTION_LAYER, inter<<4 | cumul)
-#define NUM_FN TWO_LAYERS(LAYER_NUMPAD, LAYER_FKEYS)
-#define BLU_FN TWO_LAYERS(LAYER_BLUESHIFT, LAYER_FKEYS)
+#define NUM_FN TWOLAYER_NUM_FN
+#define BLU_FN TWOLAYER_BLU_FN
 
 #define TO_BASE TO(LAYER_BASE)
 #define TT_BLUE TT(LAYER_BLUESHIFT)
@@ -271,7 +259,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         RESET,  XXXXXXX,KC_PGUP,KC_UP,  KC_PGDN,XXXXXXX,_______,
         _______,KC_HOME,KC_LEFT,KC_DOWN,KC_RGHT,KC_END,
         _______,XXXXXXX,XXXXXXX,KC_END, KC_HOME,NK_TOGG,_______,
-        _______,_______,_______,MACR(Q),MACR(K),
+        _______,_______,_______,MACRO_Q,MACRO_K,
                                                 _______,_______,
                                                         _______,
                                         KC_LCTL,KC_LSFT,_______,
@@ -337,22 +325,18 @@ void function_plover_key(keyrecord_t *record)
     bool turning_on = IS_LAYER_ON(LAYER_PLOVER);
     if (turning_on) {
         // PHRO*PB
-        action_macro_play(MACRO(
-                    DOWN(PV_LP), DOWN(PV_LH), DOWN(PV_LR),
-                    DOWN(PV_O), DOWN(PV_RP), DOWN(PV_RB),
-                    DOWN(PV_STAR),
-                    UP(PV_LP), UP(PV_LH), UP(PV_LR),
-                    UP(PV_O), UP(PV_RP), UP(PV_RB),
-                    UP(PV_STAR),
-                    END));
+        register_code(PV_LP); register_code(PV_LH); register_code(PV_LR);
+        register_code(PV_O); register_code(PV_RP); register_code(PV_RB);
+        register_code(PV_STAR);
+        unregister_code(PV_LP); unregister_code(PV_LH); unregister_code(PV_LR);
+        unregister_code(PV_O); unregister_code(PV_RP); unregister_code(PV_RB);
+        unregister_code(PV_STAR);
     } else {
         // PHRO*F
-        action_macro_play(MACRO(
-                    DOWN(PV_LP), DOWN(PV_LH), DOWN(PV_LR),
-                    DOWN(PV_O), DOWN(PV_STAR), DOWN(PV_RF),
-                    UP(PV_LP), UP(PV_LH), UP(PV_LR),
-                    UP(PV_O), UP(PV_STAR), UP(PV_RF),
-                    END));
+        register_code(PV_LP); register_code(PV_LH); register_code(PV_LR);
+        register_code(PV_O); register_code(PV_STAR); register_code(PV_RF);
+        unregister_code(PV_LP); unregister_code(PV_LH); unregister_code(PV_LR);
+        unregister_code(PV_O); unregister_code(PV_STAR); unregister_code(PV_RF);
     }
 }
 
@@ -366,37 +350,56 @@ bool are_mods_pressed(uint8_t mods, keyrecord_t *record)
     return mods_pressed;
 }
 
-uint16_t function_special_key_get_keycode(keyrecord_t *record, uint8_t param)
+uint16_t function_special_key_get_keycode(keyrecord_t *record, uint16_t keycode)
 {
-    switch (param) {
-        case APOSTROPHE_CMD_TICK:
+    switch (keycode) {
+        case SPECIAL_APOSTROPHE_CMD_TICK:
             return are_mods_pressed(MOD_BIT(KC_LGUI) | MOD_BIT(KC_RGUI), record)
                 ? KC_GRV: DV_QUOT;
-        case ESCAPE_CMD_TICK:
+        case SPECIAL_ESCAPE_CMD_TICK:
             return are_mods_pressed(MOD_BIT(KC_LGUI) | MOD_BIT(KC_RGUI), record)
                 ? KC_GRV: KC_ESC;
         default:
             break;
     }
     if (!record->event.pressed) {
-        print("Unknown special key press option: "); print_dec(param); print("\n");
+        print("Unknown special key press option: "); print_dec(keycode); print("\n");
     }
     return KC_NO;
 }
 
-void function_special_key(keyrecord_t *record, uint8_t param)
+void function_special_key(keyrecord_t *record, uint16_t custom_keycode)
 {
     action_t action;
-    uint16_t keycode = function_special_key_get_keycode(record, param);
+    const uint16_t keycode = function_special_key_get_keycode(record, custom_keycode);
     if (keycode != KC_NO) {
         action.code = ACTION_MODS_KEY(0, keycode);
         process_action(record, action);
     }
 }
 
-void function_toggle_shift(keyrecord_t *record, uint8_t keycode)
+// Mapping function to link up custom shift keycodes with the relevant key to shift.
+uint8_t shift_custom_keycode_to_keycode(uint16_t param) {
+    switch (param) {
+        case TOGGLE_SHIFT_KC_1: return KC_1;
+        case TOGGLE_SHIFT_KC_2: return KC_2;
+        case TOGGLE_SHIFT_KC_3: return KC_3;
+        case TOGGLE_SHIFT_KC_4: return KC_4;
+        case TOGGLE_SHIFT_KC_5: return KC_5;
+        case TOGGLE_SHIFT_KC_6: return KC_6;
+        case TOGGLE_SHIFT_KC_7: return KC_7;
+        case TOGGLE_SHIFT_KC_8: return KC_8;
+        case TOGGLE_SHIFT_KC_9: return KC_9;
+        case TOGGLE_SHIFT_KC_0: return KC_0;
+        case TOGGLE_SHIFT_DV_GRV: return DV_GRV;
+        default: return KC_NO;
+    };
+};
+
+void function_toggle_shift(keyrecord_t *record, uint16_t custom_keycode)
 {
     if (!record->event.pressed) return; // tap these keys only when they're pressed
+    const uint8_t keycode = shift_custom_keycode_to_keycode(custom_keycode);
     if (keycode == KC_NO) return;
     uint8_t savedmods = get_mods();
     action_t action = {.code = ACTION_MODS_KEY(savedmods ? 0 : MOD_LSFT, keycode)};
@@ -431,7 +434,7 @@ void function_toggle_shift(keyrecord_t *record, uint8_t keycode)
  *
  * Costs ~300 bytes.
  */
-void function_two_layer_switch(keyrecord_t *record, uint8_t param)
+void function_two_layer_switch(keyrecord_t *record, uint16_t keycode)
 {
     /* layer_switch_state holds state that is maintained between calls. The bit
      * at position L is on if either of the following is true:
@@ -444,8 +447,23 @@ void function_two_layer_switch(keyrecord_t *record, uint8_t param)
     static uint16_t layer_switch_state = 0;
 
     // Read parameters.
-    const uint8_t intermediate_layer = param >> 4;
-    const uint8_t cumulative_layer = param & 0xF;
+    uint8_t intermediate_layer;
+    uint8_t cumulative_layer;
+
+    switch (keycode) {
+        case TWOLAYER_NUM_FN:
+            intermediate_layer = LAYER_NUMPAD;
+            cumulative_layer = LAYER_FKEYS;
+            break;
+        case TWOLAYER_BLU_FN:
+            intermediate_layer = LAYER_BLUESHIFT;
+            cumulative_layer = LAYER_FKEYS;
+            break;
+        default:
+            print("Unknown layer setting called\n");
+            print("keycode  = "); print_hex8(keycode); print("\n");
+            return;
+    }
 
     const uint16_t intermediate_mask = 1UL << intermediate_layer;
     const uint16_t cumulative_mask = 1UL << cumulative_layer;
@@ -511,23 +529,24 @@ void function_two_layer_switch(keyrecord_t *record, uint8_t param)
     process_action(record, action_cumulative);
 }
 
-void function_send_macro(keyrecord_t *record, uint8_t param)
+void function_send_macro(keyrecord_t *record, uint16_t keycode)
 {
     if (!record->event.pressed) return;
-    switch (param) {
+    switch (keycode) {
         case MACRO_Q: MACRO_DEF_Q;
         case MACRO_L: MACRO_DEF_L;
         case MACRO_K: MACRO_DEF_K;
         case MACRO_D: MACRO_DEF_D;
         default:
             print("Unknown macro called\n");
-            print("param  = "); print_hex8(param); print("\n");
+            print("keycode  = "); print_hex8(keycode); print("\n");
             return;
     }
 }
 
 /* override hook */
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    print("keycode = "); print_hex8(keycode); print("\n");
     switch(keycode) {
         case FWDBACK:
             // Next track, or previous track if shift is pressed.
@@ -538,45 +557,30 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 del_mods(MOD_BIT(KC_LSFT) | MOD_BIT(KC_RSFT));
                 send_keyboard_report();
             }
-            uint8_t keycode = shift_pressed ? KC_MEDIA_PREV_TRACK : KC_MEDIA_NEXT_TRACK;
-            tap_code(keycode);
+            uint8_t fwd_or_back = shift_pressed ? KC_MEDIA_PREV_TRACK : KC_MEDIA_NEXT_TRACK;
+            tap_code(fwd_or_back);
             if (shift_pressed) {
                 set_mods(savedmods);
                 send_keyboard_report();
             }
             return false;
+        case PLOVER:
+            function_plover_key(record);
+            return false;
+        case TOGGLE_SHIFT_MIN ... TOGGLE_SHIFT_MAX:
+            function_toggle_shift(record, keycode);
+            return false;
+        case MACRO_MIN ... MACRO_MAX:
+            function_send_macro(record, keycode);
+            return false;
+        case SPECIAL_KEY_MIN ... SPECIAL_KEY_MAX:
+            function_special_key(record, keycode);
+            return false;
+        case TWOLAYER_MIN ... TWOLAYER_MAX:
+            function_two_layer_switch(record, keycode);
+            return false;
         default:
             return true;
-    }
-}
-
-/* override hook */
-/* note that I've repurposed the opt and id fields */
-void action_function(keyrecord_t *record, uint8_t param /* TMK's id */, uint8_t short_id /* TMK's opt */)
-{
-    short_id &= 0x7; // ignore taps
-    switch (short_id) {
-        case FUNCTION_NULLARY:
-            switch(param) {
-                case PLOVER_SWITCH: return function_plover_key(record);
-                default:
-                    print("Unknown nullary_function called\n");
-                    print("param  = "); print_hex8(param); print("\n");
-                    return;
-            }
-        case SPECIAL_KEY:
-            return function_special_key(record, param);
-        case TOGGLE_SHIFT:
-            return function_toggle_shift(record, param);
-        case TWO_KEY_FUNCTION_LAYER:
-            return function_two_layer_switch(record, param);
-        case SEND_MACRO:
-            return function_send_macro(record, param);
-        default:
-            print("Unknown action_function called\n");
-            print("short_id  = "); print_hex8(short_id); print("\n");
-            print("param = "); print_hex8(param); print("\n");
-            return;
     }
 }
 
@@ -587,6 +591,11 @@ void keyboard_post_init_user(void)
     ergodox_board_led_on();
     _delay_ms(250);
     ergodox_board_led_off();
+
+    // Debug
+    print("using macro range"); print("\n");
+    print("safe_range  = "); print_hex8(SAFE_RANGE); print("\n");
+    print("new safe_range  = "); print_hex8(NEW_SAFE_RANGE); print("\n");
 }
 
 /* override hook */
@@ -630,13 +639,6 @@ void matrix_scan_user(void)
             MACRO_DEF_K;
         }
     }
-}
-
-/* override hook */
-uint16_t keymap_function_id_to_action( uint16_t packed )
-{
-    /* instead of referring to fn_actions, compute the action directly */
-    return ACTION_FUNCTION(packed);
 }
 
 // vim:shiftwidth=4:cindent:expandtab:tabstop=4

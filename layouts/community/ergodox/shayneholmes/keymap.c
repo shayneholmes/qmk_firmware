@@ -41,11 +41,6 @@ enum custom_keycodes {
   SPECIAL_ESCAPE_CMD_TICK,
   SPECIAL_KEY_MAX,
 
-  TWOLAYER_MIN,
-  TWOLAYER_NUM_FN,
-  TWOLAYER_BLU_FN,
-  TWOLAYER_MAX,
-
   NEW_SAFE_RANGE, // set new safe range
 };
 
@@ -80,6 +75,11 @@ enum layer_id {
 #define TSFT_9  TOGGLE_SHIFT_KC_9
 #define TSFT_0  TOGGLE_SHIFT_KC_0
 #define TSFT_GR TOGGLE_SHIFT_DV_GRV
+
+// Use pseudo-layer-tap codes to get the tap functionality, then handle them
+// completely in process_record_user().
+#define TWOLAYER_NUM_FN LT(LAYER_NUMPAD,    KC_NO)
+#define TWOLAYER_BLU_FN LT(LAYER_BLUESHIFT, KC_NO)
 
 #define NUM_FN TWOLAYER_NUM_FN
 #define BLU_FN TWOLAYER_BLU_FN
@@ -546,7 +546,6 @@ void function_send_macro(keyrecord_t *record, uint16_t keycode)
 
 /* override hook */
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    print("keycode = "); print_hex8(keycode); print("\n");
     switch(keycode) {
         case FWDBACK:
             // Next track, or previous track if shift is pressed.
@@ -576,7 +575,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case SPECIAL_KEY_MIN ... SPECIAL_KEY_MAX:
             function_special_key(record, keycode);
             return false;
-        case TWOLAYER_MIN ... TWOLAYER_MAX:
+        case TWOLAYER_BLU_FN:
+        case TWOLAYER_NUM_FN:
             function_two_layer_switch(record, keycode);
             return false;
         default:

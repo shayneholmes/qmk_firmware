@@ -20,8 +20,4 @@
 
 #define LEADER_TIMEOUT 300
 
-// re-enable action features
-#undef NO_ACTION_MACRO
-#undef NO_ACTION_FUNCTION
-
 #endif

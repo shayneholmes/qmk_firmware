@@ -19,5 +19,6 @@
 #define QMK_KEYS_PER_SCAN 4
 
 #define LEADER_TIMEOUT 300
+#define FORCE_NKRO
 
 #endif

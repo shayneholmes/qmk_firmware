@@ -20,6 +20,7 @@ enum custom_keycodes {
   MACRO_L,
   MACRO_K,
   MACRO_D,
+  MACRO_P,
   MACRO_MAX,
 
   TOGGLE_SHIFT_MIN,
@@ -537,6 +538,7 @@ void function_send_macro(keyrecord_t *record, uint16_t keycode)
         case MACRO_L: MACRO_DEF_L;
         case MACRO_K: MACRO_DEF_K;
         case MACRO_D: MACRO_DEF_D;
+        case MACRO_P: MACRO_DEF_P;
         default:
             print("Unknown macro called\n");
             print("keycode  = "); print_hex8(keycode); print("\n");
@@ -637,6 +639,9 @@ void matrix_scan_user(void)
         }
         SEQ_ONE_KEY(DV_K) {
             MACRO_DEF_K;
+        }
+        SEQ_ONE_KEY(DV_P) {
+            MACRO_DEF_P;
         }
     }
 }

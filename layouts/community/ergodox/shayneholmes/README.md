@@ -35,29 +35,3 @@ Of note, the `FKEYS` layer is interesting because it is invoked with _two_
 There is some special handling required (see `action_two_layer_switch()`), but
 I find this works well in practice to increase access to more layers without
 layer keys proliferating across my keymap.
-
-## Functions with richer parameters
-
-To get more parameters for some key functions, we swap the uses of
-`action_function`'s `opt` and `id`:
-
- - `id` is 8 bits and therefore is useful for passing bigger parameters, like
-   keycodes and pairs of 4-bit layers.
-
- - `opt` is limited to 3 bits (the MSB is used by TMK to indicate tappability
-   as `FUNC_TAP`), so we use it to identify which function to call.
-
-An example of why this is useful: This lets us make functions like
-`TOGGLE_SHIFT`, which takes a keycode for a parameter and prints the shifted
-version when shift isn't pressed (`%` for `KC_5`, etc.) and vice versa. Putting
-the keycode in the parameter removes a layer of indirection (yet another enum)
-and makes the keymaps a little more readable.
-
-Although using 3-bit `opt` to distinguish functions seems to limit us to just
-eight functions (which we might need more of, in theory), we work around that
-somewhat with a special namespacing function, `FUNCTION_NULLARY`, which uses
-its 8-bit parameter to specify one of up to 256 functions to call (without
-parameters).
-
-This could be extended to make another namespace, e.g. for 16 functions that
-can each take 4-bit parameters.

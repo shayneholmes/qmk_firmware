@@ -4,7 +4,7 @@
 
 #include "sendstring_dvorak.h"
 
-#ifdef SHAYNEH_MACROS_H
+#if __has_include("macro.h")
 #include "macro.h"
 #else
 #include "macro_example.h"

@@ -19,10 +19,3 @@ UNICODEMAP_ENABLE := no
 UNICODE_ENABLE := no
 
 DEBOUNCE_TYPE := sym_eager_pk
-
-ifneq ("$(wildcard $(LAYOUT_KEYMAP_PATH)/macro.h)","")
-$(info "Found a customized macro file.")
-OPT_DEFS+=-DSHAYNEH_MACROS_H
-else
-$(info "No customized macro file found; falling back to example file.")
-endif

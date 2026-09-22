@@ -45,7 +45,7 @@ enum custom_keycodes {
   NEW_SAFE_RANGE, // set new safe range
 };
 
-_Static_assert(NEW_SAFE_RANGE <= (uint16_t) QK_MOD_TAP,
+_Static_assert(NEW_SAFE_RANGE <= (uint16_t) QK_USER_MAX,
         "Too many codes, they don't fit in the allotted space");
 
 /* TMK limits this to 32 */
@@ -128,7 +128,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_LSFT,SFT_T(DV_A),CTL_T(DV_O),ALT_T(DV_E),GUI_T(DV_U),DV_I,
         KC_LCTL,DV_SCLN,    DV_Q,       DV_J,       DV_K,       DV_X,   KC_DEL,
         NUM_FN, BLU_FN,     KC_LCTL,    KC_LALT,    KC_LGUI,
-                                                PLOVER, KC_LEAD,
+                                                PLOVER, QK_LEAD,
                                                         KC_F16,
                                         KC_BSPC,KC_LSFT,NUM_FN,
         // right hand
@@ -236,15 +236,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         #define NUM_CLN LSFT(DV_SCLN)
         // left hand
         TO_BASE,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,KC_PAUS,KC_PSCR,
-        _______,XXXXXXX,KC_WH_U,KC_MS_U,KC_WH_D,KC_BTN2,_______,
-        _______,XXXXXXX,KC_MS_L,KC_MS_D,KC_MS_R,KC_BTN1,
-        _______,NUM_CLN,XXXXXXX,XXXXXXX,XXXXXXX,KC_BTN3,_______,
+        _______,XXXXXXX,MS_WHLU,MS_UP,  MS_WHLD,MS_BTN2,_______,
+        _______,XXXXXXX,MS_LEFT,MS_DOWN,MS_RGHT,MS_BTN1,
+        _______,NUM_CLN,XXXXXXX,XXXXXXX,XXXXXXX,MS_BTN3,_______,
         _______,_______,_______,_______,_______,
                                                 _______,_______,
                                                         _______,
                                         _______,_______,_______,
         // right hand
-                KC_SLCK,KC_NLCK,KC_EQL, KC_PSLS,KC_PAST,KC_PMNS,_______,
+                KC_SCRL,KC_NUM, KC_EQL, KC_PSLS,KC_PAST,KC_PMNS,_______,
                 _______,KC_BSPC,KC_P7,  KC_P8,  KC_P9,  KC_PMNS,KC_BSPC,
                         KC_BSPC,KC_P4,  KC_P5,  KC_P6,  KC_PMNS,KC_PENT,
                 KC_BSPC,KC_BSPC,KC_P1,  KC_P2,  KC_P3,  KC_PPLS,KC_PENT,
@@ -257,7 +257,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [LAYER_MOVEMENT] = LAYOUT_ergodox(  // F-keys + cursor
         // left hand
         TO_BASE,KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,
-        RESET,  XXXXXXX,KC_PGUP,KC_UP,  KC_PGDN,XXXXXXX,_______,
+        QK_BOOT,XXXXXXX,KC_PGUP,KC_UP,  KC_PGDN,XXXXXXX,_______,
         _______,KC_HOME,KC_LEFT,KC_DOWN,KC_RGHT,KC_END,
         _______,XXXXXXX,XXXXXXX,KC_END, KC_HOME,NK_TOGG,_______,
         _______,_______,_______,MACRO_Q,MACRO_K,
@@ -266,7 +266,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                         KC_LCTL,KC_LSFT,_______,
         // right hand
                 KC_F7,  KC_F8,  KC_F9,  KC_F10, KC_F11, KC_F12, KC_MINS,
-                _______,XXXXXXX,KC_PGUP,KC_UP,  KC_PGDN,XXXXXXX,RESET,
+                _______,XXXXXXX,KC_PGUP,KC_UP,  KC_PGDN,XXXXXXX,QK_BOOT,
                         KC_HOME,KC_LEFT,KC_DOWN,KC_RGHT,KC_END, _______,
                 _______,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,XXXXXXX,_______,
                                 KC_RGUI,KC_RALT,_______,_______,_______,
@@ -616,33 +616,19 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     return state;
 }
 
-LEADER_EXTERNS();
-
-/* override hook */
-void matrix_scan_user(void)
-{
-    LEADER_DICTIONARY() {
-        leading = false;
-        leader_end();
-
-        SEQ_ONE_KEY(DV_Q) {
-            MACRO_DEF_Q;
-        }
-        SEQ_ONE_KEY(DV_SCLN) {
-            MACRO_DEF_Q_S;
-        }
-        SEQ_ONE_KEY(DV_L) {
-            MACRO_DEF_L;
-        }
-        SEQ_ONE_KEY(DV_D) {
-            MACRO_DEF_D;
-        }
-        SEQ_ONE_KEY(DV_K) {
-            MACRO_DEF_K;
-        }
-        SEQ_ONE_KEY(DV_P) {
-            MACRO_DEF_P;
-        }
+void leader_end_user(void) {
+    if (leader_sequence_one_key(DV_Q)) {
+        MACRO_DEF_Q;
+    } else if (leader_sequence_one_key(DV_SCLN)) {
+        MACRO_DEF_Q_S;
+    } else if (leader_sequence_one_key(DV_L)) {
+        MACRO_DEF_L;
+    } else if (leader_sequence_one_key(DV_D)) {
+        MACRO_DEF_D;
+    } else if (leader_sequence_one_key(DV_K)) {
+        MACRO_DEF_K;
+    } else if (leader_sequence_one_key(DV_P)) {
+        MACRO_DEF_P;
     }
 }
 

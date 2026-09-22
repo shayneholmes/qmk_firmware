@@ -1,13 +1,6 @@
 #ifndef CONFIG_USER_H
 #define CONFIG_USER_H
 
-#undef MANUFACTURER
-#undef PRODUCT
-#undef DESCRIPTION
-#define MANUFACTURER    Shayne Holmes
-#define PRODUCT         Ergodox
-#define DESCRIPTION     QMK firmware for Ergodox; layout by Shayne Holmes
-
 #undef  TAPPING_TOGGLE
 #define TAPPING_TOGGLE  3
 #undef  TAPPING_TERM
